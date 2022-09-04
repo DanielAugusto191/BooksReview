@@ -15,3 +15,6 @@ By consuming the Google Book API, BooksReview(Name subject to change), will disp
 
 # Tools
 Rust, Html+CSS+JS, MYSql.
+
+# Devs
+Daniel Augusto - Back/Front End / Database
