@@ -13,6 +13,8 @@ By consuming the Google Book API, BooksReview(Name subject to change), will disp
   - Favorites Books
   - Reviews
 
+In the "firstlook" folder, u can see some images (Prob, it wont be like that, its only for reference.)
+
 # Tools
 Rust, Html+CSS+JS, MYSql.
 
