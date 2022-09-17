@@ -6,7 +6,6 @@ By consuming the Google Book API, BooksReview(Name subject to change), will disp
 
 # Features
 - [ ] BookShelf with lot of Books.
-- [ ] Books not listed, can be added. (Not for all users but for personal accounts)·
 - [ ] Profile
   - Profile Pictures
   - Friend list
@@ -19,6 +18,30 @@ In the "firstlook" folder, u can see some images (Prob, it wont be like that, it
 Rust, Html+CSS+JS, MYSql.
 
 # Devs
-Daniel Augusto <br>
 André Luis Costa <br>
+Daniel Augusto <br>
+Kayke Ranan <br>
 Pedro Cipriano <br>
+
+# BACKLOG
+- Tarefas Tecnicas:
+  - Estudar como fazer request de API.
+  - Estruturar e criar banco de dados.
+  - Estrutuar Design frontend.
+
+- Historia: Como usuario quero encontrar livros para fazer uma review ou ver as notas.
+  - Tarefas:
+    - Projetar e testar pagina com lista de livros.
+    - Sistema para adicionar e favoritar livros.
+    - Sistema de Notas.
+    - Sistema de Busca de Livros.
+    - Sistema de Ordenação de todos os livros por nota, nome, etc...
+
+- Historia: Como usuario quero acessar minhas review
+  - Tarefas:
+    - Projetar e testar pagina de perfil com login.
+    - Sistema de Ordenação de livros ja lidos por nota, nome, etc...
+
+- Historia: Como usuario quero ver review de outras pessoas. (adicional)
+  - Tarefas:
+    - Criar uma Lista de Amigos.
