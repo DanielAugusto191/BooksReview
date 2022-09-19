@@ -45,4 +45,4 @@ Pedro Cipriano <br>
 
 - Historia: Como usuario quero ver review de outras pessoas. (adicional)
   - Tarefas:
-    - Criar uma Lista de Amigos.
+    - Criar uma Lista de Amigos. (A definir)
