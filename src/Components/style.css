@@ -148,6 +148,7 @@ html{
     position: relative;
     box-sizing: border-box;
     overflow: hidden;
+    overflow-y: scroll;
     font-size: 1.3rem;
 }
 .overlay-inner .close{
