@@ -171,6 +171,9 @@ html{
 .overlay-inner .inner-box h4{
     color: blue;
 }
+.overlay-inner .inner-box h5{
+    color: red;
+}
 .overlay-inner .inner-box button{
     outline: none;
     border: none;
