@@ -16,7 +16,8 @@ const Main=()=>{
         <>
             <div className="header">
                 <div className="row1">
-                    <h1>A room without books is like<br/> a body without a soul.</h1>
+                    <h1>BooksReview</h1><br/>
+                    <h2>Find your book and write a review</h2>
                 </div>
                 <div className="row2">
                     <h2>Find Your Book</h2>
@@ -26,7 +27,6 @@ const Main=()=>{
                         onKeyPress={searchBook}/>
                         <button><i className="fas fa-search"></i></button>
                     </div>
-                    <img src="./images/bg2.png" alt="" />
                 </div>
             </div>
 
