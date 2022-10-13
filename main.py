@@ -4,6 +4,7 @@ import urllib.request, json
 import os
 import re
 from login_system import loginPage_BP
+
 app = Flask(__name__)
 app.secret_key = "LIMAO"
 app.config['ENVIRONMENT_VAR'] = 'FLASK_APP'
@@ -25,7 +26,6 @@ def home():
         # Get Books
         titulo = "O Ardiloso Cortes".replace(" ", "%20")
         url = "https://www.googleapis.com/books/v1/volumes?q=\"{}\"&orderBy=relevance&key=AIzaSyA6Z7tIcH7mawIpXKKUVrkVMNe4hD-uZNs".format(titulo)
-        f = open("limao.txt", "a")
         response = urllib.request.urlopen(url)
         data = response.read()
         data = json.loads(data)
@@ -33,7 +33,6 @@ def home():
         for i in range(len(data["items"])):  
             if "imageLinks" in data["items"][i]["volumeInfo"]:
                 bookList.append([data["items"][i]["volumeInfo"]["title"], data["items"][i]["volumeInfo"]["imageLinks"]["smallThumbnail"]])
-        f.close()
         return render_template('home.html', username=session['username'], titles=bookList)
     return redirect(url_for('loginPage.login'))
 
