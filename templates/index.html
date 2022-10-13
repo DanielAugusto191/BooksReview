@@ -11,7 +11,7 @@
 			<h1>Login</h1>
 			<div class="links">
 				<a href="{{ url_for('loginPage.login') }}" class="active">Login</a>
-				<a href="{{ url_for('register')}}">Register</a>
+				<a href="{{ url_for('loginPage.register')}}">Register</a>
 			</div>
 			<form action="{{ url_for('loginPage.login') }}" method="post">
 				<label for="username">

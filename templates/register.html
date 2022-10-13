@@ -11,9 +11,9 @@
 			<h1>Register</h1>
 			<div class="links">
 				<a href="{{ url_for('loginPage.login') }}">Login</a>
-				<a href="{{ url_for('register') }}" class="active">Register</a>
+				<a href="{{ url_for('loginPage.register') }}" class="active">Register</a>
 			</div>
-			<form action="{{ url_for('register') }}" method="post" autocomplete="off">
+			<form action="{{ url_for('loginPage.register') }}" method="post" autocomplete="off">
 				<label for="username">
 					<i class="fas fa-user"></i>
 				</label>
