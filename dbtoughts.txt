@@ -1,0 +1,18 @@
+usuario {
+	username
+	password
+	email
+}
+books {
+	nome
+	capa
+	nota
+}
+reviews {
+	titulo
+	nota
+
+}
+usuario -> *reviews, *livros
+livros -> *usuario, *reviews
+reviews -> -usuario, -livro

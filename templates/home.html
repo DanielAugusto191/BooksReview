@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+{% import 'macros.html' as macro %}
+{% block title %}{% endblock %}
+
+{% block content %}
+<h2>Home Page</h2>
+<p>Welcome back, {{ username }}!</p>
+<div class="container">
+    <h3 class="text-center"> Books</h3>
+    <div>
+        {{ macro.displayBook(titles)}}
+    </div>
+</div>
+{% endblock %}
