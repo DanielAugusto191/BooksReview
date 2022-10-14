@@ -4,6 +4,7 @@ import urllib.request, json
 import os
 import re
 from login_system import loginPage_BP
+from database.db_system import userInfo
 
 app = Flask(__name__)
 app.secret_key = "LIMAO"
@@ -22,7 +23,7 @@ if __name__ == "__main__":
 
 @app.route('/home')
 def home():
-    if 'loggedin' in session:
+    if 'loggedin' in session: # Aqui ta um exemplo de um request, é apenas um teste tem que mudar praticamente tudo, o primeiro passo provavel, é ver bem como dar o request e quais informações vao pegar, depois montar um digrama de classes de como vao quardar essas infos, tipo, classe Book, atributo titulo, capa, descrição. Metodo: getTitle() etc. 
         # Get Books
         titulo = "O Ardiloso Cortes".replace(" ", "%20")
         url = "https://www.googleapis.com/books/v1/volumes?q=\"{}\"&orderBy=relevance&key=AIzaSyA6Z7tIcH7mawIpXKKUVrkVMNe4hD-uZNs".format(titulo)
@@ -39,10 +40,6 @@ def home():
 @app.route('/profile')
 def profile():
     if 'loggedin' in session:
-        conn = sqlite3.connect("database/database.db")
-        conn.row_factory = sqlite3.Row
-        cur = conn.cursor()
-        cur.execute('SELECT * FROM User WHERE id = ?', (session['id'],))
-        account = cur.fetchone()
+        (works, msg, account) = userInfo(session["id"])
         return render_template('profile.html', account=account)
     return redirect(url_for('loginPage.login'))
