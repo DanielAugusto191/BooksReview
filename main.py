@@ -46,4 +46,3 @@ def profile():
         account = cur.fetchone()
         return render_template('profile.html', account=account)
     return redirect(url_for('loginPage.login'))
-
