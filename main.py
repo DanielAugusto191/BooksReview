@@ -42,7 +42,7 @@ def profile():
         conn = sqlite3.connect("database/database.db")
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
-        cur.execute('SELECT * FROM accounts WHERE id = ?', (session['id'],))
+        cur.execute('SELECT * FROM User WHERE id = ?', (session['id'],))
         account = cur.fetchone()
         return render_template('profile.html', account=account)
     return redirect(url_for('loginPage.login'))

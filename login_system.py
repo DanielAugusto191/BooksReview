@@ -1,3 +1,4 @@
+import sqlite3
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from database.db_login import db_register
 loginPage_BP = Blueprint("loginPage", __name__, template_folder="templates")
@@ -12,7 +13,7 @@ def login():
         conn = sqlite3.connect("database/database.db")
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
-        account = cur.execute('SELECT * FROM accounts WHERE username = ? AND password = ?', (username, password,)).fetchone()
+        account = cur.execute('SELECT * FROM User WHERE username = ? AND password = ?', (username, password,)).fetchone()
         if account:
             session['loggedin'] = True
             session['id'] = account['id']
