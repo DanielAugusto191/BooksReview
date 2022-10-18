@@ -1,8 +1,8 @@
 
-# from flask import request
 import sqlite3
 import re
 def db_register(request):
+    works = False
     msg = ""
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
         # Set variables
@@ -15,6 +15,7 @@ def db_register(request):
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
 
+        #Query
         cur.execute('SELECT * FROM User WHERE username = ?', (username,))
         account = cur.fetchone()
         if account:
@@ -29,6 +30,30 @@ def db_register(request):
             cur.execute('INSERT INTO User VALUES (NULL, ?, ?, ?)', (username, password, email,))
             conn.commit()
             msg = 'Registrado com sucesso!'
+            works = True
     elif request.method == 'POST':
         msg = 'Preencha o formulario!'
-    return msg
+    return (works, msg)
+
+def db_login(request):
+    msg = ""
+    works = False
+    account = ""
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+        # Set variables
+        username = request.form['username']
+        password = request.form['password']
+
+        # Conn
+        conn = sqlite3.connect("database/database.db")
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+
+        # Query
+        account = cur.execute('SELECT * FROM User WHERE username = ? AND password = ?', (username, password,)).fetchone()
+        if account:
+            works = True
+        else:
+            msg = "Usuario ou senha errados!"
+            works = False
+    return (works, msg, account)
