@@ -5,7 +5,13 @@
 {% block content %}
 <h2>Home Page</h2>
 <p>Welcome back, {{ username }}!</p>
-
+<form method="POST" action="/home" class="d-flex">
+    {{ form.hidden_tag() }}
+    <input class="form-control me-2" type="search" 
+    placeholder="Search" aria-label="Search"
+    name="Searched">
+    <button class="btn" type="submit">Search</button>
+</form>
 <div class="container">
     <h3 class="text-center"> Books</h3>
     <div>
