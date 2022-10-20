@@ -26,14 +26,15 @@ def home():
     if 'loggedin' in session:
         form = SearchForm()
         if form.validate_on_submit():
-            data = bookSearch(form.searched.data)
+            data = bookSearch((form.searched.data).replace(" ", "%20"))
             form.searched.data = ''
         else:
             data = bookSearch("Skulduggery pleasant".replace(" ", "%20"))
         bookList = []
-        for i in range(len(data["items"])):  
-            if "imageLinks" in data["items"][i]["volumeInfo"]:
-                bookList.append([data["items"][i]["volumeInfo"]["title"], data["items"][i]["volumeInfo"]["imageLinks"]["smallThumbnail"]])
+        if "items" in data:
+            for i in range(len(data["items"])):  
+                if "imageLinks" in data["items"][i]["volumeInfo"]:
+                    bookList.append([data["items"][i]["volumeInfo"]["title"], data["items"][i]["volumeInfo"]["imageLinks"]["smallThumbnail"]])
         return render_template('home.html', form=form, username=session['username'], titles=bookList)
     return redirect(url_for('loginPage.login'))
 
