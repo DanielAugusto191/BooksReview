@@ -7,9 +7,10 @@
 <p>Welcome back, {{ username }}!</p>
 <form method="POST" action="/home" class="d-flex">
     {{ form.hidden_tag() }}
-    <input class="form-control me-2" type="search" 
+    {{ form.searched.input }}{{ form.searched(size=20) }}
+    <!-- <input class="form-control me-2" type="search" 
     placeholder="Search" aria-label="Search"
-    name="Searched">
+    name="Searched"> -->
     <button class="btn" type="submit">Search</button>
 </form>
 <div class="container">

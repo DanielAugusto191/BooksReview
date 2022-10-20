@@ -4,6 +4,7 @@ import re
 def db_register(request):
     works = False
     msg = ""
+    print(request.form)
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
         # Set variables
         username = request.form['username']

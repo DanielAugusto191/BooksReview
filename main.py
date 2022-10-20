@@ -29,7 +29,7 @@ def home():
             data = bookSearch(form.searched.data)
             form.searched.data = ''
         else:
-            data = bookSearch("O Ardiloso Cortes".replace(" ", "%20"))
+            data = bookSearch("Skulduggery pleasant".replace(" ", "%20"))
         bookList = []
         for i in range(len(data["items"])):  
             if "imageLinks" in data["items"][i]["volumeInfo"]:
