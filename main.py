@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
 @app.route('/home', methods=["POST", "GET"])
 def home():
-    if 'loggedin' in session: # Aqui ta um exemplo de um request, é apenas um teste tem que mudar praticamente tudo, o primeiro passo provavel, é ver bem como dar o request e quais informações vao pegar, depois montar um digrama de classes de como vao quardar essas infos, tipo, classe Book, atributo titulo, capa, descrição. Metodo: getTitle() etc. 
+    if 'loggedin' in session:
         form = SearchForm()
         if form.validate_on_submit():
             data = bookSearch(form.searched.data)

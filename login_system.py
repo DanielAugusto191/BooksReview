@@ -27,5 +27,5 @@ def logout():
 @loginPage_BP.route('/register', methods=['GET', 'POST'])
 def register():
     msg = ''
-    (result, msg) = db_register(request)[1]
+    (result, msg) = db_register(request)
     return render_template('register.html', msg=msg)

@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired
 import urllib.request, json
 
 class SearchForm(FlaskForm):
-    searched = StringField("Searched", validation=[DataRequired()])
+    searched = StringField("Searched")
     submit = SubmitField("Submit")
 
 def bookSearch(bookName):
