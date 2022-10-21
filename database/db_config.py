@@ -5,7 +5,8 @@ connection.row_factory = sqlite3.Row
 cursor = connection.cursor()
 
 # db_system.updateUsername(1, "sasa")
-# db_system.setReview(1, "TESTE", "TESTE@")
+a = db_system.setReview(1, "TESTE2", "TESTE!")
+print(a)
 
-with open("database/db_config.sql") as f:
-    connection.executescript(f.read())
+# with open("database/db_config.sql") as f:
+#     connection.executescript(f.read())
