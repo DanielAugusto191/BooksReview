@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `Book`(
 	`id` varchar(15) PRIMARY KEY NOT NULL,
   	`title` varchar(100) NOT NULL,
   	`cover` varchar(100),
+	`author` varchar(100),
   	`description` varchar(500),
 	`rate` FLOAT
 );
