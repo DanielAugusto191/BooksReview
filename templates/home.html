@@ -3,20 +3,26 @@
 {% block title %}{% endblock %}
 
 {% block content %}
-<h2>Home Page</h2>
-<p>Welcome back, {{ username }}!</p>
-<form method="POST" action="/home" class="d-flex">
-    {{ form.hidden_tag() }}
-    {{ form.searched.input }}{{ form.searched(size=20) }}
-    <!-- <input class="form-control me-2" type="search" 
-    placeholder="Search" aria-label="Search"
-    name="Searched"> -->
-    <button class="btn" type="submit">Search</button>
-</form>
-<div class="container">
-    <h3 class="text-center"> Books</h3>
-    <div>
-        {{ macro.displayBook(titles)}}
-    </div>
-</div>
+<html>
+    <body>
+        <div id="books">
+            <h2>Home Page</h2>
+            <p>Welcome back, {{ username }}!</p>
+            <form method="POST" action="/home" class="d-flex">
+                {{ form.hidden_tag() }}
+                {{ form.searched.input }}{{ form.searched(size=20) }}
+                <!-- <input class="form-control me-2" type="search" 
+                placeholder="Search" aria-label="Search"
+                name="Searched"> -->
+                <button class="btn" type="submit">Search</button>
+            </form>
+            <div class="container">
+                <h3 class="text-center"> Books</h3>
+                <div>
+                    {{ macro.displayBook(titles)}}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
 {% endblock %}

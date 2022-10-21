@@ -1,5 +1,6 @@
 # Aqui vai ter request ao banco para profiles.
 import sqlite3
+import datetime
 """
 Summary:
 
@@ -45,6 +46,7 @@ tuple of:
         cur.execute('SELECT * FROM User WHERE id = ?', (id,))
         account = dict(cur.fetchone())
         del account["password"]
+        works = True
     except Exception as e:
         msg = e
     return (works, msg, account)
@@ -61,9 +63,24 @@ newPassword = String with the User's New Password to set as the new Password
 Return:
 Tuple of:
     works = True/False - If there is no error.
-    msg = ""/"{error}" - Status of works.
+    msg = "Update com sucesso!"/"{error}" - Status of works.
 '''
-    pass
+    works = False
+    msg = ""
+    try:
+        conn = sqlite3.connect("database/database.db")
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+        cur.execute('SELECT password FROM User WHERE id = ?', (id,))
+        result = dict(cur.fetchone())
+        if oldPassword == result["password"]:
+            cur.execute("UPDATE User SET password = ? WHERE id = ?", (newPassword, id,))
+            conn.commit()
+        works = True
+        msg = "Update com sucesso!"
+    except Exception as e:
+        msg = e
+    return (works, msg)
 
 def updateProfilePicture(id, newProfilePicture):
     ''' 
@@ -93,7 +110,19 @@ Tuple of:
     works = True/False - If there is no error.
     msg = ""/"{error}" - Status of works.
 '''
-    pass
+    works = False
+    msg = ""
+    try:
+        conn = sqlite3.connect("database/database.db")
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+        cur.execute("UPDATE User SET username = ? WHERE id = ?", (newUserName, id,))
+        conn.commit()
+        works = True
+        msg = "Update com sucesso!"
+    except Exception as e:
+        msg = e
+    return (works, msg)
 
 def setReview(userID, bookID, review):
     ''' 
@@ -109,7 +138,19 @@ Tuple of:
     works = True/False - If there is no error.
     msg = ""/"{error}" - Status of works.
 '''
-    pass
+    works = False
+    msg = ""
+    try:
+        conn = sqlite3.connect("database/database.db")
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+        cur.execute("INSERT INTO Review (fk_User, fk_Book, review, date) VALUES (?, ?, ?, ?)", (userID, bookID,  review, datetime.datetime.now()))
+        conn.commit()
+        works = True
+        msg = "Review adicionado!"
+    except Exception as e:
+        msg = e
+    return (works, msg)
 
 def updateReview(userID, bookID, review):
     ''' 
@@ -188,6 +229,12 @@ Tuple of:
     works = True/False - If there is no error.
     msg = ""/"{error}" - Status of works.
 '''
+    pass
+
+def getRate():
+    pass
+
+def getAllRate():
     pass
 
 def toogleBookAsFavorite(UserID, bookID):
