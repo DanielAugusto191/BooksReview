@@ -12,4 +12,5 @@ class Book:
         self.authors = bookData['volumeInfo']['authors']
         self.imageLink = bookData['volumeInfo']['imageLinks']['smallThumbnail']
         self.description = bookData['volumeInfo']['description']
+        self.id = bookData['id']
 
