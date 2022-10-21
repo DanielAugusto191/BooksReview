@@ -2,8 +2,8 @@
     {% for book in books_list %}
         <div style="margin-bottom: 15px;">
             <div class="text-center">
-                <img src="{{ book[1] }}" alt="{{ book[0] }} poster" class="img-responsive">
-                <h4>{{ book[0] }}</h4>
+                <img src="{{ book.imageLink }}" alt="{{ book.title }} poster" class="img-responsive">
+                <h4>{{ book.title }}</h4>
             </div>
         </div>
     {% endfor %}

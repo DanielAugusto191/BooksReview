@@ -5,6 +5,7 @@ import re
 from login_system import loginPage_BP
 from database.db_system import userInfo
 from bookSearch import bookSearch, SearchForm
+from Book import Book, sortBookList
 
 app = Flask(__name__)
 app.secret_key = "LIMAO"
@@ -25,6 +26,8 @@ if __name__ == "__main__":
 def home():
     if 'loggedin' in session:
         form = SearchForm()
+        #TODO - sortBy field
+        sortBy = "relevance" 
         if form.validate_on_submit():
             data = bookSearch((form.searched.data).replace(" ", "%20"))
             form.searched.data = ''
@@ -33,8 +36,8 @@ def home():
         bookList = []
         if "items" in data:
             for i in range(len(data["items"])):  
-                if "imageLinks" in data["items"][i]["volumeInfo"]:
-                    bookList.append([data["items"][i]["volumeInfo"]["title"], data["items"][i]["volumeInfo"]["imageLinks"]["smallThumbnail"]])
+                if "imageLinks" in data["items"][i]["volumeInfo"] and "description" in data["items"][i]["volumeInfo"]:
+                    bookList.append(Book(data["items"][i]))
         return render_template('home.html', form=form, username=session['username'], titles=bookList)
     return redirect(url_for('loginPage.login'))
 
