@@ -44,6 +44,8 @@ tuple of:
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
         cur.execute('SELECT * FROM User WHERE id = ?', (id,))
+        if cur.fetchone() == None:
+            raise Exception("ID invalido!")
         account = dict(cur.fetchone())
         del account["password"]
         works = True
@@ -72,6 +74,8 @@ Tuple of:
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
         cur.execute('SELECT password FROM User WHERE id = ?', (id,))
+        if cur.fetchone() == None:
+            raise Exception("ID invalido!")
         result = dict(cur.fetchone())
         if oldPassword == result["password"]:
             cur.execute("UPDATE User SET password = ? WHERE id = ?", (newPassword, id,))
@@ -137,20 +141,30 @@ Return:
 Tuple of:
     works = True/False - If there is no error.
     msg = ""/"{error}" - Status of works.
+    result = {},{review_id, data} - if works return nothing, if not return a dict with previous review_id and date of review.
 '''
     works = False
     msg = ""
+    result = {}
     try:
         conn = sqlite3.connect("database/database.db")
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
-        cur.execute("INSERT INTO Review (fk_User, fk_Book, review, date) VALUES (?, ?, ?, ?)", (userID, bookID,  review, datetime.datetime.now()))
-        conn.commit()
-        works = True
-        msg = "Review adicionado!"
+        # TODO: Check if book is on DB, if its not, look on API and add book.
+        cur.execute('SELECT id, date FROM Review WHERE fk_User = ? and fk_Book = ?', (userID, bookID))
+        if cur.fetchone() == None:
+            raise Exception("ID invalido!")
+        result = dict(cur.fetchone())
+        if result:
+            msg = ("Você ja fez um review sobre esse livro!" )
+        else:
+            cur.execute("INSERT INTO Review (fk_User, fk_Book, review, date) VALUES (?, ?, ?, ?)", (userID, bookID,  review, datetime.datetime.now()))
+            conn.commit()
+            works = True
+            msg = "Review adicionado!"
     except Exception as e:
         msg = e
-    return (works, msg)
+    return (works, msg, result)
 
 def updateReview(userID, bookID, review):
     ''' 
