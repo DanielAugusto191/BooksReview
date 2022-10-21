@@ -8,6 +8,10 @@
 body {
     background-color: #435165;
     margin: 0;
+    height: 100vh;
+}
+div#books {
+    height: 100%
 }
 .login, .register {
     width: 400px;
