@@ -3,7 +3,9 @@
         <div style="margin-bottom: 15px;">
             <div class="text-center">
                 <img src="{{ book.imageLink }}" alt="{{ book.title }} poster" class="img-responsive">
+                <p> {{book.description }}</p>
                 <h4>{{ book.title }}</h4>
+                <input type="submit" value="Dar review">
             </div>
         </div>
     {% endfor %}

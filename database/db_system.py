@@ -75,9 +75,10 @@ Tuple of:
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
         cur.execute('SELECT password FROM User WHERE id = ?', (id,))
-        if cur.fetchone() == None:
+        result = cur.fetchone()
+        if result == None:
             raise Exception("ID invalido!")
-        result = dict(cur.fetchone())
+        result = dict(result)
         if oldPassword == result["password"]:
             cur.execute("UPDATE User SET password = ? WHERE id = ?", (newPassword, id,))
             conn.commit()
@@ -129,7 +130,8 @@ Tuple of:
         msg = e
     return (works, msg)
 
-def setReview(userID, bookObject, review):
+# TODO: bookID turns into Book Object
+def setReview(userID, bookID, review):
     ''' 
 Set a new review of a book
 
@@ -142,7 +144,7 @@ Return:
 Tuple of:
     works = True/False - If there is no error.
     msg = ""/"{error}" - Status of works.
-    result = {},{review_id, data} - if works return nothing, if not return a dict with previous review_id and date of review.
+    result = None,{review_id, data} - if works return nothing, if not return a dict with previous review_id and date of review.
 '''
     works = False
     msg = ""
@@ -153,20 +155,21 @@ Tuple of:
         cur = conn.cursor()
         # TODO: Check if book is on DB, if its not, look on API and add book.
         cur.execute('SELECT id, date FROM Review WHERE fk_User = ? and fk_Book = ?', (userID, bookID))
-        if cur.fetchone() == None:
-            raise Exception("ID invalido!")
-        result = dict(cur.fetchone())
-        if result:
-            msg = ("Você ja fez um review sobre esse livro!" )
-        else:
+        result = cur.fetchone()
+        if result == None:
             cur.execute("INSERT INTO Review (fk_User, fk_Book, review, date) VALUES (?, ?, ?, ?)", (userID, bookID,  review, datetime.datetime.now()))
             conn.commit()
             works = True
             msg = "Review adicionado!"
+        else:
+            result = dict(result)
+            if result:
+                msg = ("Você ja fez um review sobre esse livro!" )
     except Exception as e:
         msg = e
     return (works, msg, result)
 
+# TODO: bookID turns into bookObject
 def updateReview(userID, bookID, review):
     ''' 
 Update a review of a book
@@ -188,13 +191,12 @@ Tuple of:
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
         cur.execute("UPDATE Review SET review = ? WHERE fk_User = ? and fk_Book = ?", (review, userID, bookID,))
-        if cur.fetchone() == None:
-            raise Exception("IDs invalido! ou não existe este review!")
-        result = dict(cur.fetchone())
+        conn.commit()
         works = True
     except Exception as e:
         msg = e
     return (works, msg)
+
 
 def getReview(userID, bookID):
     ''' 
@@ -212,17 +214,21 @@ Tuple of:
 '''
     works = False
     msg = ""
+    review = ""
     try:
         conn = sqlite3.connect("database/database.db")
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
         cur.execute("SELECT date, review FROM Review WHERE fk_User = ? and fk_Book = ?", (userID, bookID,))
-        conn.commit()
+        result = cur.fetchone()
+        if result == None:
+            raise Exception("Wrong ID or Reviews not found!")
+        review = dict(result)
         works = True
-        msg = "Review atualizado!"
+        msg = ""
     except Exception as e:
         msg = e
-    return (works, msg)
+    return (works, msg, review)
 
 def getAllReviews(userID):
     ''' 
