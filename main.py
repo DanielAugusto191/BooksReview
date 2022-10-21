@@ -55,5 +55,5 @@ def home():
 def profile():
     if 'loggedin' in session:
         (works, msg, account) = userInfo(session["id"])
-        return render_template('profile.html', account=account)
+        return render_template('profile.html', account=account, username=session['username'])
     return redirect(url_for('loginPage.login'))
