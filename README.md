@@ -1,53 +1,48 @@
-# SETUP para testes
+# BooksReview (Name subject to change)
+BooksReview(Name subject to change) will be a bookshelf to add your reviews and rate your favorite books.
 
-Primeiramente, eu fiz o doc, baseado em linux entao para windows, tem que achar as coisas equivalentes. Segundo, não coloquei a instalação da virtualenv e python pois varia um pouco entre cada sistema, no geral você provalvemente vai achar ele no seu packager manager. Vou deixar alguns links.
+# Intro
+By consuming the Google Book API, BooksReview(Name subject to change), will display a list of books, on Google Books Database. For the user, a personal profile containing your favorite books, reviews, friend list, profile pictures, and more. Also, for a better experience, the user will be able to compare your profile with his friends and see some metrics to define Compatibility with him.
 
-## 1. Requisitos:
-python 3.10.8
-https://www.python.org/downloads/
+# Features
+- [ ] BookShelf with lot of Books.
+- [ ] Profile
+  - Profile Pictures
+  - Friend list (Additional)
+  - Favorites Books
+  - Reviews
 
-virtualenv = 20.16.2
+In the "firstlook" folder, u can see some images (Prob, it wont be like that, its only for reference.)
 
-https://virtualenv.pypa.io/en/latest/installation.html
-## 2. virtualenv:
-Para o que todos tenham instalados as bibliotecas usadas no projeto automaticamente usamos um ambiente virtual, que será criado pela virtaulenv, todos os pacotes que forem instalados dentro do ambiente virtual são seperados dos pacotes que você tem instalado somente on seu PC.
-Para isso, ao clonar o rep, e ter a virtualenv instalada,
-Dentro do diretorio principal digite:
-```python3 -m venv env```
-isso irá criar uma virtualenv dentro de uma pasta chamada env.
+# Tools
+Python + FLASK, Html CSS, SQLite3.
 
-Para usa-la digite:
+# Devs
+André Luis Costa <br>
+Daniel Augusto <br>
+Kayke Ranan <br>
+Pedro Cipriano <br>
 
-```source env/bin/activate```
+# BACKLOG
+- Tarefas Tecnicas:
+  - Estudar como fazer request de API. (Pedro e Kayke)
+  - Estruturar e criar banco de dados. (Daniel)
+  - Estruturar Design frontend. (Andre)
 
-Para checkar se está usando o python da env digite:
+- Historia: Como usuario quero encontrar livros para fazer uma review ou ver as notas.
+  - Tarefas:
+    - Projetar e testar pagina com lista de livros. (Andre)
+    - Sistema para adicionar reviews e favoritar livros. (Daniel)
+    - Sistema de Notas. (Daniel)
+    - Sistema de Busca de Livros. (Kayke)
+    - Sistema de Ordenação de todos os livros por nota, nome, autor, etc... (Pedro)
 
-```which python3```
+- Historia: Como usuario quero acessar e editar minhas reviews
+  - Tarefas:
+    - Projetar e testar pagina de perfil com login. (Andre)
+    - Sistema para remoção e edição de reviews. (Kayke)
+    - Sistema de Ordenação de reviews por nota, nome do livro, etc... (Pedro)
 
-o resultado tem que ser o diretorio da sua venv. Todos os comandos a seguir devem ser feitos usando o python da venv, para não alterar o seu sistema.
-
-Depois para installar as bibliotecas do projeto digite:
-
-```python3 -m pip install -r requirements.txt```
-
-Caso voces adicionem alguma biblioteca, lembrem de gerar o requirements.txt denovo para todos sincronizarem as bibliotecas. Ele pode ser gerado assim:
-
-```python3 -m pip freeze > requirements.txt```
-
-para sair da venv:
-```deactivate```
-
-mais detalhes aqui: https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
-
-## 3. Flask
-No processo anterior, a env já vai instalar o flask como library, agora só falta configura-lo:
-Dentro do diretorio do projeto digite:
-``` export FLASK_APP=main.py"```
-```export FLASK_DEBUG=1```
-cuidado com espaços. O primeiro comando diz ao Flask qual nosso arquivo tem o app, pra ele rodar o server. O segundo é só para ajudar a desenvolver, com ele não será necessario interpretar o programa todas as vezes basta uma vez, e a cada vez que salvar algum arquivo ele atualiza a página automaticamente, é muito prático.
-
-e por fim:
-```flask run```
-isso dará um ip: ```127.0.0.1:5000```
-ao acessar do navegador vai ser possivel ver a página.
-Esse ip e porta são configurados em main.py em app.run caso tenha conflitos de portas e etc.
+- Historia: Como usuario quero ver review de outras pessoas. (adicional)
+  - Tarefas:
+    - Criar uma Lista de Amigos. (A definir)
