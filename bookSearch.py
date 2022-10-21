@@ -1,8 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired
 
 import urllib.request, json
+
+class SortForm(FlaskForm):
+    sortBy = SelectField('Sort by', choices = [('relevance', 'Relevance'), ('title', 'Title'), ('authors', 'Authors')])
 
 class SearchForm(FlaskForm):
     searched = StringField("Searched")

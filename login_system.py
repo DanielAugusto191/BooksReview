@@ -1,21 +1,23 @@
+from re import S
 import sqlite3
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from database.db_login import db_register
 from database.db_login import db_login
-from bookSearch import SearchForm
+from bookSearch import SearchForm, SortForm
 loginPage_BP = Blueprint("loginPage", __name__, template_folder="templates")
 
 @loginPage_BP.route('/', methods=['GET', 'POST'])
 def login():
-    form = SearchForm()
+    searchForm = SearchForm()
+    sortForm = SortForm()
     msg = ''
     (result, msg, account) = db_login(request)
     if result:
         session['loggedin'] = True
         session['id'] = account['id']
         session['username'] = account['username']
-        return render_template('home.html', msg=msg, username=session["username"], form = form)
-    return render_template('index.html', msg=msg, form=form)
+        return render_template('home.html', msg=msg, username=session["username"], searchForm=searchForm, sortForm=sortForm)
+    return render_template('index.html', msg=msg)
 
 @loginPage_BP.route('/logout')
 def logout():
