@@ -7,17 +7,25 @@
     <body>
         <div id="books">
             <h2>Home Page</h2>
-            <p>Welcome back, {{ username }}!</p>
+            <!-- <p>Welcome back, {{ username }}!</p> -->
             <form method="POST" action="/home" class="d-flex">
-                {{ searchForm.hidden_tag() }}
-                {{ searchForm.searched.input }}{{ searchForm.searched(size=20) }}<br>
-                {{ searchForm.sortBy }}<br>
-                <button class="btn" type="submit">Search</button>
+                <h3 class="text-center">Search Books</h3>
+                <p>
+                    {{ searchForm.hidden_tag() }}
+                    {{ searchForm.searched.input }}{{ searchForm.searched(size=16.5) }}<br>
+                </p>
+                <p>
+                    Order by  {{ searchForm.sortBy }}
+                </p>
+                <p>
+                    <button class="btn" type="submit">Search</button>
+                </p>
+                
             </form>
             <div class="container">
-                <h3 class="text-center"> Books</h3>
+                <h3 class="text-center">Search Results:</h3>
                 <div>
-                    {{ macro.displayBook(titles)}}
+                    {{ macro.displayBook(titles) }}
                 </div>
             </div>
         </div>
