@@ -1,4 +1,4 @@
-import db_connect
+import database.db_connect
 
 
 def checkUser(userID):

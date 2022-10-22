@@ -1,7 +1,7 @@
 # Aqui vai ter request ao banco para profiles.
 import datetime
-import db_checks
-import db_connect
+import database.db_checks
+import database.db_connect
 """
 Summary:
 
