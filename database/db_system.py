@@ -1,4 +1,4 @@
-# Aqui vai ter request ao banco para profiles.
+# Aqui vai ter request ao banco.
 # from sys import path
 # path.insert(0, "/home/pc2/facul/sem8/ES/BooksReview/")
 
@@ -8,23 +8,43 @@ from database.db_connect import *
 from Book import Book
 """
 Summary:
+#Users
+    userInfo(id) - Given a user id return yours info.
+    updatePassword(id, oldPassword, newPassword) -  Update user's password
+    updateProfilePicture(id, newProfilePicture) - Update user's profile picture
+    updateUsername(id, newUserName) - Update user's username
 
-userInfo(id) - Given a user id return yours info.
-updatePassword(id, oldPassword, newPassword) -  Update user's password
-updateProfilePicture(id, newProfilePicture) - Update user's profile picture
-updateUsername(id, newUserName) - Update user's username
-setReview(userID, bookID, review) - Set a new review of a book
-updateReview(userID, bookID, review) - Update a review of a book
-getReview(userID, bookID) - Get a User's review of a book
-getAllReviews(userID) - Get all reviews of a User
-setRate(userID, bookID, rate) - Assigns the rate the user has given to a book
-updateRate(userID, bookID, newRate) - Update the rate the user has given to a book
-toogleBookAsFavorite(UserID, bookID) - Set/Unset a book as users favorite. (Limit of 5 books)
-requestFavoritesBooks(UserID, bookID) - Return the users favorite books
+#Books
+    addBook(book) - Given a book object, add it in Database.
+    getBookByID(bookID) - Given a book ID return a object of Book, with all informations in Database.
+    updateBookRate(bookID) - Given a book ID, update the rate of this book, the rate is equal to the mean of all user's rate, rounded.
+
+#Review
+    setReview(userID, bookID, review) - Set a new review of a book
+    updateReview(userID, bookID, review) - Update a review of a book
+    getReview(userID, bookID) - Get a User's review of a book
+    getAllReviews(userID) - Get all reviews of a User
+    delReview(userID, book) - Delete a review of a user.
+
+#Rate
+    setRate(userID, bookID, rate) - Assigns the rate the user has given to a book
+    updateRate(userID, bookID, newRate) - Update the rate the user has given to a book
+    getRate(userID, book) - Get the rate that user given to the book. 
+    getAllRate(userID) - Get all the rates given by the user.
+    delRate(userID, book) - Delete a rate given to a book.
+
+#Status
+    setStatus(userID, book, status) - Assigns the book status. (0 = Unreaded, 1 = Want to read, 2 = Reading, 3 = Complete)
+    getStatus(userID, book) - Get status of a user about the book.
+    getAllStatus(userID) - Get all user's status.
+    delStatus(userID, book) - Delete user's status of a book.
+
+#Favorite
+    toogleBookAsFavorite(UserID, bookID) - Set/Unset a book as users favorite. (Limit of 5 books)
+    requestFavoritesBooks(UserID, bookID) - Return the users favorite books
 
 Parameters and Return are given below:
 """
-
 ### USER ####
 
 def userInfo(id):
@@ -141,6 +161,17 @@ Tuple of:
 ### BOOKS ###
 
 def addBook(book):
+    ''' 
+Given a book object, add it in Database.
+
+Parameters:
+book: book Object
+
+Return:
+Tuple of:
+    works = True/False - If there is no error.
+    msg = "Livro adicionado!"/"{error}" - Status of works.
+'''
     works = False
     msg = ""
     try:
@@ -157,8 +188,21 @@ def addBook(book):
     return (works, msg)
 
 def getBookByID(bookID):
+    ''' 
+Given a book ID return a object of Book, with all informations in Database.
+
+Parameters:
+bookID: ID of a book;
+
+Return:
+Tuple of:
+    works = True/False - If there is no error.
+    msg = "ok"/"{error}" - Status of works.
+    Book = Object of type book, with all informations in Database.
+'''
     works = False
     msg = ""
+    book = None
     try:
         (conn, cur) = connectDatabase()
         if not checkBook(bookID):
@@ -169,8 +213,41 @@ def getBookByID(bookID):
             raise Exception("No book with this ID")
         result = dict(result)
         bb = {"id": result["id"], "volumeInfo": {"title": result["title"], "authors": result["author"], "description": result["description"], "imageLinks": {"smallThumbnail": result["cover"]}}}
-        print(bb)
-        
+        book = Book(bb)
+        works = True
+        msg = "ok"
+    except Exception as e:
+        msg = e
+    return (works, msg)
+
+def updateBookRate(bookID):
+    ''' 
+Given a book ID, update the rate of this book, the rate is equal to the mean of all user's rate, rounded.
+
+Parameters:
+bookID: ID of a book;
+
+Return:
+Tuple of:
+    works = True/False - If there is no error.
+    msg = "ok"/"{error}" - Status of works.
+'''
+    works = False
+    msg = ""
+    try:
+        (conn, cur) = connectDatabase()
+        if not checkBook(bookID):
+            raise Exception("Books not in DB")
+        cur.execute("SELECT rate from rate WHERE fk_Book = ?", (bookID,))
+        result = cur.fetchall()
+        n = 0
+        s = 0
+        for e in result:
+            n += 1
+            s += e['rate']
+        new_rate = round(s/n, 1)
+        cur.execute("UPDATE book SET rate = ? WHERE id = ?", (new_rate, bookID,))
+        conn.commit()
         works = True
         msg = "ok"
     except Exception as e:
@@ -178,15 +255,13 @@ def getBookByID(bookID):
     return (works, msg)
 
 ### REVIEW ####
-
-# TODO: bookID turns into Book Object
 def setReview(userID, book, review):
     ''' 
 Set a new review of a book
 
 Parameters:
 userID = User id
-bookObject = Object with book's informations
+bookObject = book Object
 Review = String with the user review.
 
 Return:
@@ -205,8 +280,6 @@ Tuple of:
             raise Exception("Invalid UserID!")
         if not checkBook(bookID):
             addBook(book)
-
-        # TODO: Check if book is on DB, if its not, look on API and add book.
         cur.execute('SELECT id, date FROM Review WHERE fk_User = ? and fk_Book = ?', (userID, bookID))
         result = cur.fetchone()
         if result == None:
@@ -222,14 +295,13 @@ Tuple of:
         msg = e
     return (works, msg, result)
 
-# TODO: bookID turns into bookObject
 def updateReview(userID, book, review):
     ''' 
 Update a review of a book
 
 Parameters:
 userID = User id
-bookID = Book id
+book = book Object
 Review = String with the new user review.
 
 Return:
@@ -260,7 +332,7 @@ Get a User's review of a book
 
 Parameters:
 userID = User id
-bookID = Book id
+book = book Object
 
 Return:
 Tuple of:
@@ -323,6 +395,18 @@ Tuple of:
 
 # Delete o review
 def delReview(userID, book):
+    ''' 
+Delete a review of a user.
+
+Parameters:
+userID = User id
+book = book Object
+
+Return:
+Tuple of:
+    works = True/False - If there is no error.
+    msg = ""/"error" - Status of works.
+'''
     works = False
     msg = ""
     bookID = book.id
@@ -348,7 +432,7 @@ Assigns the rate the user has given to a book
 
 Parameters:
 userID = User id
-bookID = Book id
+book = book Object
 rate = The rate that user gives to the book.
 
 Return:
@@ -375,10 +459,11 @@ Tuple of:
             conn.commit()
             works = True
             msg = "Rate adicionado!"
+            updateBookRate(bookID)
         else:
             result = dict(result)
             if result:
-                msg = ("Você ja fez uma nota para esse livro!" )
+                msg = ("Você ja deu uma nota para esse livro!" )
     except Exception as e:
         msg = e
     return (works, msg, result)
@@ -390,7 +475,7 @@ Update the rate the user has given to a book
 
 Parameters:
 userID = User id
-bookID = Book id
+book = book Object
 newRate = The rate that user gives to the book.
 
 Return:
@@ -409,12 +494,26 @@ Tuple of:
             addBook(book)
         cur.execute("UPDATE rate SET rate = ? WHERE fk_User = ? and fk_Book = ?", (newRate, userID, bookID,))
         conn.commit()
+        updateBookRate(bookID)
         works = True
     except Exception as e:
         msg = e
     return (works, msg)
 
 def getRate(userID, book):
+    ''' 
+Get the rate that user given to the book.
+
+Parameters:
+userID = User id
+book = book Object
+
+Return:
+Tuple of:
+    works = True/False - If there is no error.
+    msg = ""/"{error}" - Status of works.
+    result = {rate} - Rate given to the book.
+'''
     works = False
     msg = ""
     result = None
@@ -437,6 +536,18 @@ def getRate(userID, book):
     return (works, msg, result)
 
 def getAllRate(userID):
+    ''' 
+Get all the rates given by the user.
+
+Parameters:
+userID = User id
+
+Return:
+Tuple of:
+    works = True/False - If there is no error.
+    msg = ""/"{error}" - Status of works.
+    rates = [{"data":"data", "rate":"rate", "fk_Book":"bookID"},...] - List of dict(data, rate and bookID);
+'''
     works = False
     msg = ""
     rates = []
@@ -457,6 +568,18 @@ def getAllRate(userID):
     return (works, msg, rates)
 
 def delRate(userID, book):
+    ''' 
+Get all the rates given by the user.
+
+Parameters:
+userID = User id
+book = book Object
+
+Return:
+Tuple of:
+    works = True/False - If there is no error.
+    msg = ""/"{error}" - Status of works.
+'''
     works = False
     msg = ""
     bookID = book.id
@@ -475,9 +598,22 @@ def delRate(userID, book):
     return (works, msg)
 
 ### STATUS ####
-# 0 - Unreaded, 1 - Want to read, 2 - Reading, 3 - Complete
+# (0 = Unreaded, 1 = Want to read, 2 = Reading, 3 = Complete)
 
 def setStatus(userID, book, status):
+    ''' 
+Assigns the book status. (0 = Unreaded, 1 = Want to read, 2 = Reading, 3 = Complete)
+
+Parameters:
+userID = User id
+book = book Object
+status = (0 = Unreaded, 1 = Want to read, 2 = Reading, 3 = Complete)
+
+Return:
+Tuple of:
+    works = True/False - If there is no error.
+    msg = ""/"{error}" - Status of works.
+'''
     works = False
     msg = ""
     bookID = book.id
@@ -507,6 +643,19 @@ def setStatus(userID, book, status):
     return (works, msg)
 
 def getStatus(userID, book):
+    ''' 
+Get status of a user about the book.
+
+Parameters:
+userID = User id
+book = book Object
+
+Return:
+Tuple of:
+    works = True/False - If there is no error.
+    msg = ""/"{error}" - Status of works.
+    result = None / {"data": data, "status":INT} - None if dont work, dict(data, status) if works.
+'''
     works = False
     msg = ""
     result = None
@@ -530,6 +679,18 @@ def getStatus(userID, book):
     return (works, msg, result)
 
 def getAllStatus(userID):
+    ''' 
+Get all user's status.
+
+Parameters:
+userID = User id
+
+Return:
+Tuple of:
+    works = True/False - If there is no error.
+    msg = ""/"{error}" - Status of works.
+    status = [] / [{"data": data, "status":INT, "fk_Book":bookID},...] - [] if dont work, list of dict(data, status, fk_Book) if works.
+'''
     works = False
     msg = ""
     status = []
@@ -550,6 +711,18 @@ def getAllStatus(userID):
     return (works, msg, status)
 
 def delStatus(userID, book):
+    ''' 
+Delete user's status of a book.
+
+Parameters:
+userID = User id
+book = Book Object
+
+Return:
+Tuple of:
+    works = True/False - If there is no error.
+    msg = ""/"{error}" - Status of works.
+'''
     works = False
     bookID = book.id
     msg = ""
@@ -574,7 +747,7 @@ Set/Unset a book as users favorite.
 
 Parameters:
 userID = User id
-bookID = Book id
+book = book Object
 
 Return:
 Tuple of:
@@ -610,7 +783,7 @@ Return the users favorite books
 
 Parameters:
 userID = User id
-bookID = Book id
+book = book Object
 
 Return:
 Tuple of:
