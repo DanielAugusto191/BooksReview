@@ -15,7 +15,8 @@ cursor = connection.cursor()
 # a = db_system.updateReview(1, "limao", "Review Atualizado")
 # a = db_system.getReview(1, "limao")
 # a = db_system.getAllReviews(1)
-a = db_system.delRate(1, "limao")
+# a = db_system.setStatus(1, "maça", 1)
+a = db_system.delStatus(1, "limao")
 print(a)
 
 # with open("database/db_config.sql") as f:

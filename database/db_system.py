@@ -423,17 +423,94 @@ def delRate(userID, bookID):
     return (works, msg)
 
 ### STATUS ####
-def setStatus():
-    pass
+# 0 - Unreaded, 1 - Want to read, 2 - Reading, 3 - Complete
 
-def getStatus():
-    pass
+def setStatus(userID, bookID, status):
+    works = False
+    msg = ""
+    try:
+        (conn, cur) = db_connect.connectDatabase()
+        if db_checks.checkStatus(status):
+            raise Exception("Invalid Status")
+        if not db_checks.checkUser(userID):
+            raise Exception("Invalid UserID!")
+        if not db_checks.checkBook(bookID):
+            raise Exception("Invalid BookID!")
+        cur.execute('SELECT id, date FROM Status WHERE fk_User = ? and fk_Book = ?', (userID, bookID))
+        result = cur.fetchone()
+        if result == None:
+            cur.execute("INSERT INTO Status (fk_User, fk_Book, status, date) VALUES (?, ?, ?, ?)", (userID, bookID,  status, datetime.datetime.now()))
+            conn.commit()
+            works = True
+            msg = "Status adicionado!"
+        else:
+            cur.execute("UPDATE Status SET Status = ? WHERE fk_User = ? and fk_Book = ?", (status, userID, bookID,))
+            conn.commit()
+            woks = True
+            msg = "Status Atualizado!"
+        works = True
+    except Exception as e:
+        msg = e
+    return (works, msg)
 
-def getAllStatus():
-    pass
+def getStatus(userID, bookID):
+    works = False
+    msg = ""
+    result = None
+    try:
+        (conn, cur) = db_connect.connectDatabase()
+        if not db_checks.checkUser(userID):
+            raise Exception("Invalid UserID!")
+        if not db_checks.checkBook(bookID):
+            raise Exception("Invalid BookID!")
+        cur.execute("SELECT date, status FROM Status WHERE fk_User = ? and fk_Book = ?", (userID, bookID,))
+        result = cur.fetchone()
+        if result == None:
+            result = {"date": None, "status": 0}
+        else:
+            result = dict(result)
+        works = True
+        msg = ""
+    except Exception as e:
+        msg = e
+    return (works, msg, result)
 
-def delStatus():
-    pass
+def getAllStatus(userID):
+    works = False
+    msg = ""
+    status = []
+    try:
+        (conn, cur) = db_connect.connectDatabase()
+        if not db_checks.checkUser(userID):
+            raise Exception("Invalid UserID!")
+        cur.execute("SELECT date, status, fk_Book FROM status WHERE fk_User = ?", (userID,))
+        result = cur.fetchall()
+        for e in result:
+            status.append(dict(e))
+        if len(status) == 0:
+            raise Exception("Status not found!")
+        works = True
+        msg = ""
+    except Exception as e:
+        msg = e
+    return (works, msg, status)
+
+def delStatus(userID, bookID):
+    works = False
+    msg = ""
+    try:
+        (conn, cur) = db_connect.connectDatabase()
+        if not db_checks.checkUser(userID):
+            raise Exception("Invalid UserID!")
+        if not db_checks.checkBook(bookID):
+            raise Exception("Invalid BookID!")
+        cur.execute("DELETE FROM status WHERE fk_User = ? and fk_Book = ?", (userID, bookID))
+        conn.commit()
+        works = True
+        msg = ""
+    except Exception as e:
+        msg = e
+    return (works, msg)
 
 ### FAVORITES ####
 def toogleBookAsFavorite(UserID, bookID):

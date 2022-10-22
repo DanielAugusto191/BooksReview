@@ -13,3 +13,7 @@ def checkBook(bookID):
     cur.execute('SELECT * FROM Book WHERE id = ?', (bookID,))
     result = cur.fetchone()
     return (result != None)
+
+def checkStatus(status):
+    return (status < 0 or status > 3)
+        
