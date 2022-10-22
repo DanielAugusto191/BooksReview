@@ -4,9 +4,6 @@ from wtforms.validators import DataRequired
 
 import urllib.request, json
 
-class SortForm(FlaskForm):
-    sortBy = SelectField('Sort by', choices = [('relevance', 'Relevance'), ('title', 'Title'), ('authors', 'Authors')])
-
 class SearchForm(FlaskForm):
     searched = StringField("Searched")
     sortBy = SelectField('Sort by', choices = [('relevance', 'Relevance'), ('title', 'Title'), ('authors', 'Authors')])
