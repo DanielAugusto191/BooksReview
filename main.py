@@ -6,7 +6,7 @@ import re
 
 from login_system import loginPage_BP
 from database.db_system import userInfo
-from bookSearch import bookSearch, SearchForm, SortForm
+from bookSearch import bookSearch, SearchForm
 from Book import Book, sortBookList
 
 app = Flask(__name__)
@@ -30,24 +30,20 @@ searched = "Skulduggery pleasant".replace(" ", "%20")
 def home():
     if 'loggedin' in session:
         searchForm = SearchForm()
-        sortForm = SortForm()
         global searched
         if searchForm.validate_on_submit():
             if searchForm.searched.data != None:
                 searched = (searchForm.searched.data).replace(" ", "%20")
-        #if searchForm.validate_on_submit():
-        #    data = bookSearch(search)
-        #else:
-        #    data = bookSearch("Skulduggery pleasant".replace(" ", "%20"))
         data = bookSearch(searched)
         bookList = []
         if "items" in data:
             for i in range(len(data["items"])):  
-                if "imageLinks" in data["items"][i]["volumeInfo"] and "description" in data["items"][i]["volumeInfo"]:
+                if (("imageLinks" in data["items"][i]["volumeInfo"]) and ("description" in data["items"][i]["volumeInfo"])
+                and ("authors" in data["items"][i]["volumeInfo"])):
                     bookList.append(Book(data["items"][i]))
-        if(sortForm.sortBy.data is not None):
-            bookList = sortBookList(bookList, sortForm.sortBy.data)
-        return render_template('home.html', searchForm = searchForm, sortForm = sortForm, username=session['username'], titles=bookList)
+        if(searchForm.sortBy.data is not None):
+            bookList = sortBookList(bookList, searchForm.sortBy.data)
+        return render_template('home.html', searchForm = searchForm, username=session['username'], titles=bookList)
         #return render_template('home.html', searchForm = searchForm, sortForm = sortForm, username=sortForm.sortBy.data, titles=bookList)
     return redirect(url_for('loginPage.login'))
 

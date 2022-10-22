@@ -10,19 +10,9 @@
             <p>Welcome back, {{ username }}!</p>
             <form method="POST" action="/home" class="d-flex">
                 {{ searchForm.hidden_tag() }}
-                {{ searchForm.searched.input }}{{ searchForm.searched(size=20) }}
-                <!-- <input class="form-control me-2" type="search" 
-                placeholder="Search" aria-label="Search"
-                name="Searched"> -->
+                {{ searchForm.searched.input }}{{ searchForm.searched(size=20) }}<br>
+                {{ searchForm.sortBy }}<br>
                 <button class="btn" type="submit">Search</button>
-            </form>
-            <form method="POST" action="/home" class="d-flex">
-                {{ sortForm.hidden_tag() }}
-                {{ sortForm.sortBy }}
-                <!-- <input class="form-control me-2" type="search" 
-                placeholder="Search" aria-label="Search"
-                name="Searched"> -->
-                <button class="btn" type="submit">Sort</button>
             </form>
             <div class="container">
                 <h3 class="text-center"> Books</h3>

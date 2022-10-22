@@ -9,6 +9,7 @@ class SortForm(FlaskForm):
 
 class SearchForm(FlaskForm):
     searched = StringField("Searched")
+    sortBy = SelectField('Sort by', choices = [('relevance', 'Relevance'), ('title', 'Title'), ('authors', 'Authors')])
     submit = SubmitField("Submit")
 
 def bookSearch(bookName):
