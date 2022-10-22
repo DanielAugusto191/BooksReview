@@ -180,7 +180,7 @@ def getBookByID(bookID):
 ### REVIEW ####
 
 # TODO: bookID turns into Book Object
-def setReview(userID, bookID, review):
+def setReview(userID, book, review):
     ''' 
 Set a new review of a book
 
@@ -198,12 +198,13 @@ Tuple of:
     works = False
     msg = ""
     result = None
+    bookID = book.id
     try:
         (conn, cur) = connectDatabase()
         if not checkUser(userID):
             raise Exception("Invalid UserID!")
         if not checkBook(bookID):
-            raise Exception("Invalid BookID!")
+            addBook(book)
 
         # TODO: Check if book is on DB, if its not, look on API and add book.
         cur.execute('SELECT id, date FROM Review WHERE fk_User = ? and fk_Book = ?', (userID, bookID))
@@ -222,7 +223,7 @@ Tuple of:
     return (works, msg, result)
 
 # TODO: bookID turns into bookObject
-def updateReview(userID, bookID, review):
+def updateReview(userID, book, review):
     ''' 
 Update a review of a book
 
@@ -238,12 +239,13 @@ Tuple of:
 '''
     works = False
     msg = ""
+    bookID = book.id
     try:
         (conn, cur) = connectDatabase()
         if not checkUser(userID):
             raise Exception("Invalid UserID!")
         if not checkBook(bookID):
-            raise Exception("Invalid BookID!")
+            addBook(book)
         cur.execute("UPDATE Review SET review = ? WHERE fk_User = ? and fk_Book = ?", (review, userID, bookID,))
         conn.commit()
         works = True
@@ -252,7 +254,7 @@ Tuple of:
     return (works, msg)
 
 
-def getReview(userID, bookID):
+def getReview(userID, book):
     ''' 
 Get a User's review of a book
 
@@ -269,12 +271,13 @@ Tuple of:
     works = False
     msg = ""
     review = ""
+    bookID = book.id
     try:
         (conn, cur) = connectDatabase()
         if not checkUser(userID):
             raise Exception("Invalid UserID!")
         if not checkBook(bookID):
-            raise Exception("Invalid BookID!")
+            addBook(book)
         cur.execute("SELECT date, review FROM Review WHERE fk_User = ? and fk_Book = ?", (userID, bookID,))
         result = cur.fetchone()
         if result == None:
@@ -319,15 +322,16 @@ Tuple of:
     return (works, msg, review)
 
 # Delete o review
-def delReview(userID, bookID):
+def delReview(userID, book):
     works = False
     msg = ""
+    bookID = book.id
     try:
         (conn, cur) = connectDatabase()
         if not checkUser(userID):
             raise Exception("Invalid UserID!")
         if not checkBook(bookID):
-            raise Exception("Invalid BookID!")
+            addBook(book)
         cur.execute("DELETE FROM review WHERE fk_User = ? and fk_Book = ?", (userID, bookID))
         conn.commit()
         works = True
@@ -338,7 +342,7 @@ def delReview(userID, bookID):
 
 ### RATE ####
 
-def setRate(userID, bookID, rate):
+def setRate(userID, book, rate):
     ''' 
 Assigns the rate the user has given to a book
 
@@ -356,12 +360,13 @@ Tuple of:
     works = False
     msg = ""
     result = None
+    bookID = book.id
     try:
         (conn, cur) = connectDatabase()
         if not checkUser(userID):
             raise Exception("Invalid UserID!")
         if not checkBook(bookID):
-            raise Exception("Invalid BookID!")
+            addBook(book)
 
         cur.execute('SELECT id, date FROM Rate WHERE fk_User = ? and fk_Book = ?', (userID, bookID))
         result = cur.fetchone()
@@ -379,7 +384,7 @@ Tuple of:
     return (works, msg, result)
     pass
 
-def updateRate(userID, bookID, newRate):
+def updateRate(userID, book, newRate):
     ''' 
 Update the rate the user has given to a book
 
@@ -395,12 +400,13 @@ Tuple of:
 '''
     works = False
     msg = ""
+    bookID = book.id
     try:
         (conn, cur) = connectDatabase()
         if not checkUser(userID):
             raise Exception("Invalid UserID!")
         if not checkBook(bookID):
-            raise Exception("Invalid BookID!")
+            addBook(book)
         cur.execute("UPDATE rate SET rate = ? WHERE fk_User = ? and fk_Book = ?", (newRate, userID, bookID,))
         conn.commit()
         works = True
@@ -408,16 +414,17 @@ Tuple of:
         msg = e
     return (works, msg)
 
-def getRate(userID, bookID):
+def getRate(userID, book):
     works = False
     msg = ""
     result = None
+    bookID = book.id
     try:
         (conn, cur) = connectDatabase()
         if not checkUser(userID):
             raise Exception("Invalid UserID!")
         if not checkBook(bookID):
-            raise Exception("Invalid BookID!")
+            addBook(book)
         cur.execute("SELECT date, rate FROM rate WHERE fk_User = ? and fk_Book = ?", (userID, bookID,))
         result = cur.fetchone()
         if result == None:
@@ -449,15 +456,16 @@ def getAllRate(userID):
         msg = e
     return (works, msg, rates)
 
-def delRate(userID, bookID):
+def delRate(userID, book):
     works = False
     msg = ""
+    bookID = book.id
     try:
         (conn, cur) = connectDatabase()
         if not checkUser(userID):
             raise Exception("Invalid UserID!")
         if not checkBook(bookID):
-            raise Exception("Invalid BookID!")
+            addBook(book)
         cur.execute("DELETE FROM rate WHERE fk_User = ? and fk_Book = ?", (userID, bookID))
         conn.commit()
         works = True
@@ -469,9 +477,10 @@ def delRate(userID, bookID):
 ### STATUS ####
 # 0 - Unreaded, 1 - Want to read, 2 - Reading, 3 - Complete
 
-def setStatus(userID, bookID, status):
+def setStatus(userID, book, status):
     works = False
     msg = ""
+    bookID = book.id
     try:
         (conn, cur) = connectDatabase()
         if checkStatus(status):
@@ -479,7 +488,7 @@ def setStatus(userID, bookID, status):
         if not checkUser(userID):
             raise Exception("Invalid UserID!")
         if not checkBook(bookID):
-            raise Exception("Invalid BookID!")
+            addBook(book)
         cur.execute('SELECT id, date FROM Status WHERE fk_User = ? and fk_Book = ?', (userID, bookID))
         result = cur.fetchone()
         if result == None:
@@ -497,16 +506,17 @@ def setStatus(userID, bookID, status):
         msg = e
     return (works, msg)
 
-def getStatus(userID, bookID):
+def getStatus(userID, book):
     works = False
     msg = ""
     result = None
+    bookID = book.id
     try:
         (conn, cur) = connectDatabase()
         if not checkUser(userID):
             raise Exception("Invalid UserID!")
         if not checkBook(bookID):
-            raise Exception("Invalid BookID!")
+            addBook(book)
         cur.execute("SELECT date, status FROM Status WHERE fk_User = ? and fk_Book = ?", (userID, bookID,))
         result = cur.fetchone()
         if result == None:
@@ -539,15 +549,16 @@ def getAllStatus(userID):
         msg = e
     return (works, msg, status)
 
-def delStatus(userID, bookID):
+def delStatus(userID, book):
     works = False
+    bookID = book.id
     msg = ""
     try:
         (conn, cur) = connectDatabase()
         if not checkUser(userID):
             raise Exception("Invalid UserID!")
         if not checkBook(bookID):
-            raise Exception("Invalid BookID!")
+            addBook(book)
         cur.execute("DELETE FROM status WHERE fk_User = ? and fk_Book = ?", (userID, bookID))
         conn.commit()
         works = True
@@ -557,7 +568,7 @@ def delStatus(userID, bookID):
     return (works, msg)
 
 ### FAVORITES ####
-def toogleBookAsFavorite(userID, bookID):
+def toogleBookAsFavorite(userID, book):
     ''' 
 Set/Unset a book as users favorite.
 
@@ -571,13 +582,14 @@ Tuple of:
     msg = "on/off" / "{error}" - Status of works. on = addde, off = removed
 '''
     works = False
+    bookID = book.id
     msg = ""
     try:
         (conn, cur) = connectDatabase()
         if not checkUser(userID):
             raise Exception("Invalid UserID!")
         if not checkBook(bookID):
-            raise Exception("Invalid BookID!")
+            addBook(book)
         cur.execute("SELECT * from Favorites WHERE fk_User = ? and fk_Book = ?", (userID, bookID))
         result = cur.fetchone()
         if result == None:
@@ -608,6 +620,7 @@ Tuple of:
 '''
     works = False
     msg = ""
+    bookID = book.id
     books = []
     try:
         (conn, cur) = connectDatabase()
