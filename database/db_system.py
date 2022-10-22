@@ -62,6 +62,8 @@ tuple of:
         - ID = User id
         - Username = User's username
         - Email = user's Email
+        - bio = User's Biografy
+        - profile_pic = User's Profile Picture
 '''
     works = False
     msg = ""
