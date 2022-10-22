@@ -2,12 +2,17 @@
     {% for book in books_list %}
         <div style="margin-bottom: 15px;">
             <div class="text-center">
-                <h4>{{ book.title }}</h4>
-                <img src="{{ book.imageLink }}" alt="{{ book.title }} poster" class="img-responsive">
-                <input type="submit" value="Escrever review">
-                <p> {{book.description }}</p>
+                <hr>
+                <div style="text-align: center;">
+                    <h4>{{ book.title }}</h4>
+                    <img src="{{ book.imageLink }}" alt="{{ book.title }} poster" class="img-responsive">
+                </div>
+                <p>{{ book.description }}</p>
+                <div style="text-align: center;">
+                    <input type="submit" value="Escrever review">
+                </div>
+                
             </div>
         </div>
     {% endfor %}
-
 {% endmacro %}
