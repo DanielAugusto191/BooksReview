@@ -3,7 +3,7 @@ import sqlite3
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from database.db_login import db_register
 from database.db_login import db_login
-from bookSearch import SearchForm, SortForm
+from bookSearch import SearchForm
 loginPage_BP = Blueprint("loginPage", __name__, template_folder="templates")
 
 @loginPage_BP.route('/', methods=['GET', 'POST'])

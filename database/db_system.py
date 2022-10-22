@@ -1,7 +1,11 @@
 # Aqui vai ter request ao banco para profiles.
+# from sys import path
+# path.insert(0, "/home/pc2/facul/sem8/ES/BooksReview/")
+
 import datetime
-import database.db_checks
-import database.db_connect
+from database.db_checks import *
+from database.db_connect import *
+from Book import Book
 """
 Summary:
 
@@ -43,8 +47,8 @@ tuple of:
     msg = ""
     account = ""
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if not db_checks.checkUser(id):
+        (conn, cur) = connectDatabase()
+        if not checkUser(id):
             raise Exception("Invalid UserID!")
         cur.execute('SELECT * FROM User WHERE id = ?', (id,))
         account = cur.fetchone()
@@ -52,6 +56,7 @@ tuple of:
             raise Exception("ID invalido!")
         account = dict(account)
         del account["password"]
+        print(account)
         works = True
     except Exception as e:
         msg = e
@@ -74,8 +79,8 @@ Tuple of:
     works = False
     msg = ""
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if not db_checks.checkUser(id):
+        (conn, cur) = connectDatabase()
+        if not checkUser(id):
             raise Exception("Invalid UserID!")
         cur.execute('SELECT password FROM User WHERE id = ?', (id,))
         result = cur.fetchone()
@@ -122,13 +127,52 @@ Tuple of:
     works = False
     msg = ""
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if not db_checks.checkUser(id):
+        (conn, cur) = connectDatabase()
+        if not checkUser(id):
             raise Exception("Invalid UserID!")
         cur.execute("UPDATE User SET username = ? WHERE id = ?", (newUserName, id,))
         conn.commit()
         works = True
         msg = "Update com sucesso!"
+    except Exception as e:
+        msg = e
+    return (works, msg)
+
+### BOOKS ###
+
+def addBook(book):
+    works = False
+    msg = ""
+    try:
+        (conn, cur) = connectDatabase()
+        if checkBook(book.id):
+            raise Exception("Books already in DB")
+        # TODO: bookRate
+        cur.execute("INSERT INTO Book (id, title, cover, author, description, rate) VALUES (?, ?, ?, ?, ?, ?)", (book.id, book.title, book.imageLink, book.authors[0], book.description, 0.0))
+        conn.commit()
+        works = True
+        msg = "Livro adicionado!"
+    except Exception as e:
+        msg = e
+    return (works, msg)
+
+def getBookByID(bookID):
+    works = False
+    msg = ""
+    try:
+        (conn, cur) = connectDatabase()
+        if not checkBook(bookID):
+            raise Exception("Books not in DB")
+        cur.execute("SELECT * from Book WHERE id = ?", (bookID,))
+        result = cur.fetchone()
+        if result == None:
+            raise Exception("No book with this ID")
+        result = dict(result)
+        bb = {"id": result["id"], "volumeInfo": {"title": result["title"], "authors": result["author"], "description": result["description"], "imageLinks": {"smallThumbnail": result["cover"]}}}
+        print(bb)
+        
+        works = True
+        msg = "ok"
     except Exception as e:
         msg = e
     return (works, msg)
@@ -155,10 +199,10 @@ Tuple of:
     msg = ""
     result = None
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if not db_checks.checkUser(userID):
+        (conn, cur) = connectDatabase()
+        if not checkUser(userID):
             raise Exception("Invalid UserID!")
-        if not db_checks.checkBook(bookID):
+        if not checkBook(bookID):
             raise Exception("Invalid BookID!")
 
         # TODO: Check if book is on DB, if its not, look on API and add book.
@@ -195,10 +239,10 @@ Tuple of:
     works = False
     msg = ""
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if not db_checks.checkUser(userID):
+        (conn, cur) = connectDatabase()
+        if not checkUser(userID):
             raise Exception("Invalid UserID!")
-        if not db_checks.checkBook(bookID):
+        if not checkBook(bookID):
             raise Exception("Invalid BookID!")
         cur.execute("UPDATE Review SET review = ? WHERE fk_User = ? and fk_Book = ?", (review, userID, bookID,))
         conn.commit()
@@ -226,10 +270,10 @@ Tuple of:
     msg = ""
     review = ""
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if not db_checks.checkUser(userID):
+        (conn, cur) = connectDatabase()
+        if not checkUser(userID):
             raise Exception("Invalid UserID!")
-        if not db_checks.checkBook(bookID):
+        if not checkBook(bookID):
             raise Exception("Invalid BookID!")
         cur.execute("SELECT date, review FROM Review WHERE fk_User = ? and fk_Book = ?", (userID, bookID,))
         result = cur.fetchone()
@@ -259,8 +303,8 @@ Tuple of:
     msg = ""
     review = []
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if not db_checks.checkUser(userID):
+        (conn, cur) = connectDatabase()
+        if not checkUser(userID):
             raise Exception("Invalid UserID!")
         cur.execute("SELECT date, review, fk_Book FROM Review WHERE fk_User = ?", (userID,))
         result = cur.fetchall()
@@ -279,10 +323,10 @@ def delReview(userID, bookID):
     works = False
     msg = ""
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if not db_checks.checkUser(userID):
+        (conn, cur) = connectDatabase()
+        if not checkUser(userID):
             raise Exception("Invalid UserID!")
-        if not db_checks.checkBook(bookID):
+        if not checkBook(bookID):
             raise Exception("Invalid BookID!")
         cur.execute("DELETE FROM review WHERE fk_User = ? and fk_Book = ?", (userID, bookID))
         conn.commit()
@@ -313,10 +357,10 @@ Tuple of:
     msg = ""
     result = None
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if not db_checks.checkUser(userID):
+        (conn, cur) = connectDatabase()
+        if not checkUser(userID):
             raise Exception("Invalid UserID!")
-        if not db_checks.checkBook(bookID):
+        if not checkBook(bookID):
             raise Exception("Invalid BookID!")
 
         cur.execute('SELECT id, date FROM Rate WHERE fk_User = ? and fk_Book = ?', (userID, bookID))
@@ -352,10 +396,10 @@ Tuple of:
     works = False
     msg = ""
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if not db_checks.checkUser(userID):
+        (conn, cur) = connectDatabase()
+        if not checkUser(userID):
             raise Exception("Invalid UserID!")
-        if not db_checks.checkBook(bookID):
+        if not checkBook(bookID):
             raise Exception("Invalid BookID!")
         cur.execute("UPDATE rate SET rate = ? WHERE fk_User = ? and fk_Book = ?", (newRate, userID, bookID,))
         conn.commit()
@@ -369,10 +413,10 @@ def getRate(userID, bookID):
     msg = ""
     result = None
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if not db_checks.checkUser(userID):
+        (conn, cur) = connectDatabase()
+        if not checkUser(userID):
             raise Exception("Invalid UserID!")
-        if not db_checks.checkBook(bookID):
+        if not checkBook(bookID):
             raise Exception("Invalid BookID!")
         cur.execute("SELECT date, rate FROM rate WHERE fk_User = ? and fk_Book = ?", (userID, bookID,))
         result = cur.fetchone()
@@ -390,8 +434,8 @@ def getAllRate(userID):
     msg = ""
     rates = []
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if not db_checks.checkUser(userID):
+        (conn, cur) = connectDatabase()
+        if not checkUser(userID):
             raise Exception("Invalid UserID!")
         cur.execute("SELECT date, rate, fk_Book FROM rate WHERE fk_User = ?", (userID,))
         result = cur.fetchall()
@@ -409,10 +453,10 @@ def delRate(userID, bookID):
     works = False
     msg = ""
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if not db_checks.checkUser(userID):
+        (conn, cur) = connectDatabase()
+        if not checkUser(userID):
             raise Exception("Invalid UserID!")
-        if not db_checks.checkBook(bookID):
+        if not checkBook(bookID):
             raise Exception("Invalid BookID!")
         cur.execute("DELETE FROM rate WHERE fk_User = ? and fk_Book = ?", (userID, bookID))
         conn.commit()
@@ -429,12 +473,12 @@ def setStatus(userID, bookID, status):
     works = False
     msg = ""
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if db_checks.checkStatus(status):
+        (conn, cur) = connectDatabase()
+        if checkStatus(status):
             raise Exception("Invalid Status")
-        if not db_checks.checkUser(userID):
+        if not checkUser(userID):
             raise Exception("Invalid UserID!")
-        if not db_checks.checkBook(bookID):
+        if not checkBook(bookID):
             raise Exception("Invalid BookID!")
         cur.execute('SELECT id, date FROM Status WHERE fk_User = ? and fk_Book = ?', (userID, bookID))
         result = cur.fetchone()
@@ -458,10 +502,10 @@ def getStatus(userID, bookID):
     msg = ""
     result = None
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if not db_checks.checkUser(userID):
+        (conn, cur) = connectDatabase()
+        if not checkUser(userID):
             raise Exception("Invalid UserID!")
-        if not db_checks.checkBook(bookID):
+        if not checkBook(bookID):
             raise Exception("Invalid BookID!")
         cur.execute("SELECT date, status FROM Status WHERE fk_User = ? and fk_Book = ?", (userID, bookID,))
         result = cur.fetchone()
@@ -480,8 +524,8 @@ def getAllStatus(userID):
     msg = ""
     status = []
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if not db_checks.checkUser(userID):
+        (conn, cur) = connectDatabase()
+        if not checkUser(userID):
             raise Exception("Invalid UserID!")
         cur.execute("SELECT date, status, fk_Book FROM status WHERE fk_User = ?", (userID,))
         result = cur.fetchall()
@@ -499,10 +543,10 @@ def delStatus(userID, bookID):
     works = False
     msg = ""
     try:
-        (conn, cur) = db_connect.connectDatabase()
-        if not db_checks.checkUser(userID):
+        (conn, cur) = connectDatabase()
+        if not checkUser(userID):
             raise Exception("Invalid UserID!")
-        if not db_checks.checkBook(bookID):
+        if not checkBook(bookID):
             raise Exception("Invalid BookID!")
         cur.execute("DELETE FROM status WHERE fk_User = ? and fk_Book = ?", (userID, bookID))
         conn.commit()
@@ -513,9 +557,9 @@ def delStatus(userID, bookID):
     return (works, msg)
 
 ### FAVORITES ####
-def toogleBookAsFavorite(UserID, bookID):
+def toogleBookAsFavorite(userID, bookID):
     ''' 
-Set/Unset a book as users favorite. (Limit of 5 books)
+Set/Unset a book as users favorite.
 
 Parameters:
 userID = User id
@@ -524,11 +568,31 @@ bookID = Book id
 Return:
 Tuple of:
     works = True/False - If there is no error.
-    msg = ""/"{error}" - Status of works.
+    msg = "on/off" / "{error}" - Status of works. on = addde, off = removed
 '''
-    pass
+    works = False
+    msg = ""
+    try:
+        (conn, cur) = connectDatabase()
+        if not checkUser(userID):
+            raise Exception("Invalid UserID!")
+        if not checkBook(bookID):
+            raise Exception("Invalid BookID!")
+        cur.execute("SELECT * from Favorites WHERE fk_User = ? and fk_Book = ?", (userID, bookID))
+        result = cur.fetchone()
+        if result == None:
+            cur.execute("INSERT INTO Favorites (fk_User, fk_Book) VALUES(?, ?)", (userID, bookID)) 
+            msg = "On"
+        else:
+            cur.execute("DELETE FROM Favorites WHERE fk_User = ? and fk_Book = ?", (userID, bookID))
+            msg = "Off"
+        conn.commit()
+        works = True
+    except Exception as e:
+        msg = e
+    return (works, msg)
 
-def requestFavoritesBooks(UserID, bookID):
+def requestFavoritesBooks(userID):
     ''' 
 Return the users favorite books
 
@@ -542,4 +606,18 @@ Tuple of:
     msg = ""/"{error}" - Status of works.
     Books = List of Reviews(that are Dicts of Books ID, Books name, rate and Review) - [{"BookID"=ID, "BookName"=BooksName,"rate"=rate, "review"=Review}, {"BookID"=ID, "BookName"=BooksName, "rate"=rate, "review"=Review}, ...]
 '''
-    pass
+    works = False
+    msg = ""
+    books = []
+    try:
+        (conn, cur) = connectDatabase()
+        if not checkUser(userID):
+            raise Exception("Invalid UserID!")
+        cur.execute("SELECT fk_Book from Favorites WHERE fk_User = ?", (userID,))
+        result = cur.fetchall()
+        for e in result:
+            books.append(e["fk_Book"])
+        works = True
+    except Exception as e:
+        msg = e
+    return (works, msg, books)

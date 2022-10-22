@@ -28,7 +28,7 @@ def db_register(request):
         elif not username or not password or not email:
             msg = 'Preencha o formulario completo!'
         else:
-            cur.execute('INSERT INTO User VALUES (NULL, ?, ?, ?)', (username, password, email,))
+            cur.execute('INSERT INTO User VALUES (NULL, ?, ?, ?, ?, ?)', (username, password, email,None,None))
             conn.commit()
             msg = 'Registrado com sucesso!'
             works = True
