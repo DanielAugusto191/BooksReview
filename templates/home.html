@@ -9,10 +9,12 @@
             <h2>Home Page</h2>
             <!-- <p>Welcome back, {{ username }}!</p> -->
             <form method="POST" action="/home" class="d-flex">
-                <h3 class="text-center">Search Books</h3>
+                <p>
+                    <b>Search Books</b>
+                </p>
                 <p>
                     {{ searchForm.hidden_tag() }}
-                    {{ searchForm.searched.input }}{{ searchForm.searched(size=16.5) }}<br>
+                    {{ searchForm.searched.input }}{{ searchForm.searched(size=16) }}
                 </p>
                 <p>
                     Order by  {{ searchForm.sortBy }}
