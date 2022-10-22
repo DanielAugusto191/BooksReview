@@ -44,7 +44,6 @@ def home():
         if(searchForm.sortBy.data is not None):
             bookList = sortBookList(bookList, searchForm.sortBy.data)
         return render_template('home.html', searchForm = searchForm, username=session['username'], titles=bookList)
-        #return render_template('home.html', searchForm = searchForm, sortForm = sortForm, username=sortForm.sortBy.data, titles=bookList)
     return redirect(url_for('loginPage.login'))
 
 @app.route('/profile')
