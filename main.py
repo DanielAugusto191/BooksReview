@@ -41,8 +41,7 @@ def home():
                 if (("imageLinks" in data["items"][i]["volumeInfo"]) and ("description" in data["items"][i]["volumeInfo"])
                 and ("authors" in data["items"][i]["volumeInfo"])):
                     bookList.append(Book(data["items"][i]))
-        if(searchForm.sortBy.data is not None):
-            bookList = sortBookList(bookList, searchForm.sortBy.data)
+        bookList = sortBookList(bookList, searchForm.sortBy.data)
         return render_template('home.html', searchForm = searchForm, username=session['username'], titles=bookList)
     return redirect(url_for('loginPage.login'))
 
