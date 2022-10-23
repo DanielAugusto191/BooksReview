@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block title %}Add Review{% endblock %}
+
+{% block content %}
+<h2> Write your review!</h2>
+<form method="POST" action="/home" class="d-flex">
+    <p>
+        <b>Score</b>
+    </p>
+    <p>
+        {{ reviewForm.hidden_tag() }}
+        {{ reviewForm.score }}
+    </p>
+    <p>
+        <b>Review</b>
+    </p>
+    <p>
+        {{ reviewForm.review.input }}{{ reviewForm.review(size=50) }}
+    </p>
+        <button class="btn" type="submit">Post</button>
+</form>
+{% endblock %}
