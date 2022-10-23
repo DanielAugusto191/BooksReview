@@ -13,6 +13,7 @@ Summary:
     updatePassword(id, oldPassword, newPassword) -  Update user's password
     updateProfilePicture(id, newProfilePicture) - Update user's profile picture
     updateUsername(id, newUserName) - Update user's username
+    updateBiografy(id, newBiografy) - Update user's biografy
 
 #Books
     addBook(book) - Given a book object, add it in Database.
@@ -155,7 +156,34 @@ Tuple of:
         cur.execute("UPDATE User SET username = ? WHERE id = ?", (newUserName, id,))
         conn.commit()
         works = True
-        msg = "Update com sucesso!"
+        msg = "Usuario Atualizado com sucesso!"
+    except Exception as e:
+        msg = e
+    return (works, msg)
+
+def updateBiografy(id, newBiografy):
+    ''' 
+Update user's biografy
+
+Parameters:
+id = User id
+newBiografy = New biografy to update.
+
+Return:
+Tuple of:
+    works = True/False - If there is no error.
+    msg = ""/"{error}" - Status of works.
+'''
+    works = False
+    msg = ""
+    try:
+        (conn, cur ) = connectDatabase()
+        if not checkUser(id):
+            raise Exception("Invalid UserID!")
+        cur.execute("UPDATE User SET bio = ? WHERE id = ?", (newBiografy, id,))
+        conn.commit()
+        works = True
+        msg = "Biografia Atualizada com sucesso!"
     except Exception as e:
         msg = e
     return (works, msg)

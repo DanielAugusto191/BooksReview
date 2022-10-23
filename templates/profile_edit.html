@@ -1,6 +1,24 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <br>
+    {{ form.username(placeholder="Novo Nome de Usuario") }}
+    <br>
+    {{ form.oldPassword(placeholder="Senha Antiga") }}
+    <br>
+    {{ form.password(placeholder="Nova Senha") }}
+    <br>
+    {{ form.bio(placeholder="Briografia") }}
+    <br>
+    <hr>
+    Foto de Perfil<br><br>
+    {{ form.profile_pic(placeholder="Foto de Perfil") }}
+    <br>
+    <hr>
+    {{ form.submit(placeholder="Username") }}
+</form>
 
 {% endblock %}
