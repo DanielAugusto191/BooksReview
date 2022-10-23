@@ -5,6 +5,15 @@
 {% block content %}
 <h2> Write your review!</h2>
 <form method="POST" action="/home" class="d-flex">
+    <div style="margin-bottom: 15px;">
+        <div class="text-center"> 
+            <hr>
+            <div style="text-align: center;">
+                <h3>{{ book.title }}</h3>
+                <img src="{{ book.imageLink }}" alt="{{ book.title }} poster" class="img-responsive">
+            </div>
+        </div>
+    </div>
     <p>
         <b>Score</b>
     </p>
