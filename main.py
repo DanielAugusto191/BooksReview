@@ -10,6 +10,7 @@ from database.db_system import getAllStatus
 from database.db_system import getBookByID
 from bookSearch import bookSearch, SearchForm
 from Book import Book, sortBookList
+from bookReview import bookReviewForm
 
 app = Flask(__name__)
 app.secret_key = "LIMAO"
@@ -53,6 +54,18 @@ def profile():
     if 'loggedin' in session:
         (works, msg, account) = userInfo(session["id"])
         return render_template('profile.html', account=account, username=session['username'])
+    return redirect(url_for('loginPage.login'))
+
+@app.route('/addReview', methods=["POST"])
+def addReview():
+    if 'loggedin' in session:
+        reviewForm = bookReviewForm()
+        (works, msg, account) = userInfo(session["id"])
+        if reviewForm.validate_on_submit():
+            #TODO Add to database
+            reviewForm.review = ''
+            return render_template('profile.html', account=account, username=session['username'])
+        return render_template('addReview.html', account=account, username=session['username'])
     return redirect(url_for('loginPage.login'))
 
 @app.route('/wantRead')
