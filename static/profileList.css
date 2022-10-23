@@ -3,11 +3,12 @@ div.overContent {
     height: 100%;
     padding: 2px;
 }
+
 h1 {
     font-size: 100px;
 }
 
-div.wantReadBookList {
+div.statusBookList {
     width: auto;
     background-color: rgb(190, 248, 243);
     margin: 10px;

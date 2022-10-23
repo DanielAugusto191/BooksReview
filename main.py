@@ -58,9 +58,29 @@ def profile():
 @app.route('/wantRead')
 def wantRead():
     (works, msg, status) = getAllStatus(session['id'])
-    bookList = [] # [{data, book},...]
+    bookList = []
     if works:
         for e in status:
             if e['status'] == 1:
                 bookList.append({'date': e['date'], 'book': getBookByID(e['fk_Book'])[2]})
     return render_template("wantRead.html", books = bookList)
+
+@app.route('/reading')
+def reading():
+    (works, msg, status) = getAllStatus(session['id'])
+    bookList = []
+    if works:
+        for e in status:
+            if e['status'] == 2:
+                bookList.append({'date': e['date'], 'book': getBookByID(e['fk_Book'])[2]})
+    return render_template("reading.html", books = bookList)
+
+@app.route('/readed')
+def readed():
+    (works, msg, status) = getAllStatus(session['id'])
+    bookList = []
+    if works:
+        for e in status:
+            if e['status'] == 3:
+                bookList.append({'date': e['date'], 'book': getBookByID(e['fk_Book'])[2]})
+    return render_template("readed.html", books = bookList)

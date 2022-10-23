@@ -22,7 +22,7 @@
 {% macro wantRead(books) %}
 {% if books %}
         {% for book in books %}
-            <div class="wantReadBookList">
+            <div class="statusBookList">
                 <h3>{{book["book"].title}}</h3>
                 <img src="{{ book['book'].imageLink }}" alt="{{ book['book'].title }}" class="img-responsive">
                 <p>{{book["book"].description}}</p>
@@ -30,5 +30,33 @@
         {% endfor%}
 {% else %}
         <h2>Adicione livros que você quer ler!</h2> 
+{% endif %}
+{% endmacro %}
+
+{% macro reading(books) %}
+{% if books %}
+        {% for book in books %}
+            <div class="statusBookList">
+                <h3>{{book["book"].title}}</h3>
+                <img src="{{ book['book'].imageLink }}" alt="{{ book['book'].title }}" class="img-responsive">
+                <p>{{book["book"].description}}</p>
+            </div>
+        {% endfor%}
+{% else %}
+        <h2>Adicione livros que você está lendo!</h2> 
+{% endif %}
+{% endmacro %}
+
+{% macro readed(books) %}
+{% if books %}
+        {% for book in books %}
+            <div class="statusBookList">
+                <h3>{{book["book"].title}}</h3>
+                <img src="{{ book['book'].imageLink }}" alt="{{ book['book'].title }}" class="img-responsive">
+                <p>{{book["book"].description}}</p>
+            </div>
+        {% endfor%}
+{% else %}
+        <h2>Adicione livros que você já leu!</h2> 
 {% endif %}
 {% endmacro %}
