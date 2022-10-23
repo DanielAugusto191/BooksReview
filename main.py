@@ -51,17 +51,17 @@ def home():
         return render_template('home.html', searchForm = searchForm, username=session['username'], titles=bookList)
     return redirect(url_for('loginPage.login'))
 
-# @app.route('/addReview', methods=["GET", "POST"])
-# def addReview():
-#     if 'loggedin' in session:
-#         reviewForm = bookReviewForm()
-#         (works, msg, account) = userInfo(session["id"])
-#         if reviewForm.validate_on_submit():
-#             #TODO Add to database
-#             reviewForm.review = ''
-#             return render_template('profile.html', account=account, username=session['username'])
-#         return render_template('addReview.html', reviewForm = reviewForm, account=account, username=session['username'])
-#     return redirect(url_for('loginPage.login'))
+@app.route('/addReview', methods=["GET", "POST"])
+def addReview():
+     if 'loggedin' in session:
+         reviewForm = bookReviewForm()
+         (works, msg, account) = userInfo(session["id"])
+         if reviewForm.validate_on_submit():
+             #TODO Add to database
+             reviewForm.review = ''
+             return render_template('profile.html', account=account, username=session['username'])
+         return render_template('addReview.html', reviewForm = reviewForm, account=account, username=session['username'])
+     return redirect(url_for('loginPage.login'))
 
 @app.route('/wantRead')
 def wantRead():
