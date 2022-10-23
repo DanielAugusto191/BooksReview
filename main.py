@@ -6,6 +6,8 @@ import re
 
 from login_system import loginPage_BP
 from database.db_system import userInfo
+from database.db_system import getAllStatus
+from database.db_system import getBookByID
 from bookSearch import bookSearch, SearchForm
 from Book import Book, sortBookList
 
@@ -50,6 +52,15 @@ def home():
 def profile():
     if 'loggedin' in session:
         (works, msg, account) = userInfo(session["id"])
-        print(userInfo(session["id"]))
         return render_template('profile.html', account=account, username=session['username'])
     return redirect(url_for('loginPage.login'))
+
+@app.route('/wantRead')
+def wantRead():
+    (works, msg, status) = getAllStatus(session['id'])
+    bookList = [] # [{data, book},...]
+    if works:
+        for e in status:
+            if e['status'] == 1:
+                bookList.append({'date': e['date'], 'book': getBookByID(e['fk_Book'])[2]})
+    return render_template("wantRead.html", books = bookList)

@@ -18,3 +18,17 @@
     {% endfor %}
 {% endif %}
 {% endmacro %}
+
+{% macro wantRead(books) %}
+{% if books %}
+        {% for book in books %}
+            <div class="wantReadBookList">
+                <h3>{{book["book"].title}}</h3>
+                <img src="{{ book['book'].imageLink }}" alt="{{ book['book'].title }}" class="img-responsive">
+                <p>{{book["book"].description}}</p>
+            </div>
+        {% endfor%}
+{% else %}
+        <h2>Adicione livros que você quer ler!</h2> 
+{% endif %}
+{% endmacro %}

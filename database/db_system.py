@@ -220,7 +220,7 @@ Tuple of:
         msg = "ok"
     except Exception as e:
         msg = e
-    return (works, msg)
+    return (works, msg, book)
 
 def updateBookRate(bookID):
     ''' 
@@ -696,6 +696,7 @@ Tuple of:
     works = False
     msg = ""
     status = []
+    print("?")
     try:
         (conn, cur) = connectDatabase()
         if not checkUser(userID):

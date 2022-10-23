@@ -30,6 +30,7 @@ x = Book("O pequeno principe", ["Antoine"], "iamgem", "um livro bom", "DNV3213CO
 # a = db_system.getBookByID("DNV3213COA")
 # a = db_system.updateBookRate(x.id)
 # a = db_system.updateRate(3, x, 1.0)
+a = db_system.setStatus(1, x, 1)
 print(a)
 
 # with open("database/db_config.sql") as f:
