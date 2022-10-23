@@ -9,17 +9,29 @@
         <img src="{{ url_for('static', filename='profilePics/default.png')}}" width="200">
         <table>
             <tr>
-                <td>Username:</td>
+                <td>Nome de Usuario:</td>
                 <td>{{ account['username'] }}</td>
             </tr>
             <tr>
                 <td>Email:</td>
                 <td>{{ account['email'] }}</td>
             </tr>
+            <tr>
+                <td> <a href="{{ url_for('readed') }}">Livros lidos</a></td>
+            </tr>
+            <tr>
+                <td><a href="{{ url_for('reading') }}">Lendo</a></td>
+            </tr>
+            <tr>
+                <td><a href="{{ url_for('wantRead') }}">Quero ler</a></td>
+            </tr>
+            <tr>
+                <td><a href="{{ url_for('profilePage.profileEdit') }}">Editar Perfil</a></tr>
+            </tr>
         </table>
     </div>
     <div id="UserProfile">
-        <p>BIO</p>
+        {{ account['bio'] }}
     </div>
 </div>
 {% endblock %}
