@@ -294,7 +294,7 @@ Tuple of:
     except Exception as e:
         msg = e
     return (works, msg)
-    
+
 def getBookRateByID(bookID):
     ''' 
 Given a book ID, return the rate of this book.
@@ -360,9 +360,7 @@ Tuple of:
             works = True
             msg = "Review adicionado!"
         else:
-            result = dict(result)
-            if result:
-                msg = ("Você ja fez um review sobre esse livro!" )
+            updateReview(userID, book, review)
     except Exception as e:
         msg = e
     return (works, msg, result)
@@ -533,9 +531,7 @@ Tuple of:
             msg = "Rate adicionado!"
             updateBookRate(bookID)
         else:
-            result = dict(result)
-            if result:
-                msg = ("Você ja deu uma nota para esse livro!" )
+            updateRate(userID, book, rate)
     except Exception as e:
         msg = e
     return (works, msg, result)

@@ -73,6 +73,7 @@
                 {% else %}
                     <p>Voce ainda nao deu uma nota! - Nota Media do Livro: {{book["bookRate"]["rate"]}}</p>
                 {% endif%}
+                <a href="{{ url_for('addReview', title=book['book'].title, author=book['book'].authors, imageLink=book['book'].imageLink, description=book['book'].description, bkid=book['book'].id) }}">Editar Review</a>
             </div>
         {% endfor%}  
     {% else %}

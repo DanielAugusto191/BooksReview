@@ -6,7 +6,7 @@ import re
 
 from loginSystem import loginPage_BP
 from profile import profilePage_BP
-from database.db_system import userInfo, getAllStatus, getBookByID, setRate, setReview, setStatus
+from database.db_system import userInfo, getAllStatus, getBookByID, setRate, setReview, getReview, setStatus
 from bookSearch import bookSearch, SearchForm
 from Book import Book, sortBookList
 from bookReview import bookReviewForm
@@ -61,6 +61,9 @@ def addReview():
             bkid = request.args.get('bkid', None)
             bb = {"id": bkid, "volumeInfo": {"title": title, "authors": authors, "description": description, "imageLinks": {"smallThumbnail": imageLink}}}
             session["book"] = bb
+            bb = Book(bb)
+            (_,_,rr) = getReview(session["id"], bb)
+            reviewForm.review.data = rr["review"]
         if reviewForm.validate_on_submit():
             book = Book(session['book'])
             ch = [(None, ""), (1, 'Quero Ler'), (2, "Lendo"), (3, "Complete")]
