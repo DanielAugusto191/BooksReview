@@ -1,21 +1,21 @@
 # Esse arquivo é só para testar o banco de dados sem alterar as funções
 
-import db_system
+# import db_system
 import sqlite3
 connection = sqlite3.connect("database/database.db")
 connection.row_factory = sqlite3.Row
 cursor = connection.cursor()
 
-class Book:
-    def __init__(self, a,b,c,d,e):
-        self.title = a
-        self.authors = b
-        self.imageLink = c
-        self.description = d
-        self.id = e
+# class Book:
+#     def __init__(self, a,b,c,d,e):
+#         self.title = a
+#         self.authors = b
+#         self.imageLink = c
+#         self.description = d
+#         self.id = e
 
 
-x = Book("O pequeno principe", ["Antoine"], "iamgem", "um livro bom", "DNV3213COA")
+# x = Book("O pequeno principe", ["Antoine"], "iamgem", "um livro bom", "DNV3213COA")
 # cursor.execute("INSERT INTO Book (id, title, cover, description, rate) VALUES (?, ?, ?, ?, ?)", ('maça', 'test', 'copa', 'descrição2', '2.0'))
 # connection.commit()
 # db_system.updateUsername(1, "sasa")
@@ -30,8 +30,8 @@ x = Book("O pequeno principe", ["Antoine"], "iamgem", "um livro bom", "DNV3213CO
 # a = db_system.getBookByID("DNV3213COA")
 # a = db_system.updateBookRate(x.id)
 # a = db_system.updateRate(3, x, 1.0)
-a = db_system.setStatus(1, x, 1)
-print(a)
+# a = db_system.setStatus(1, x, 1)
+# print(a)
 
-# with open("database/db_config.sql") as f:
-#     connection.executescript(f.read())
+with open("database/db_config.sql") as f:
+    connection.executescript(f.read())
