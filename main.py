@@ -6,7 +6,7 @@ import re
 
 from loginSystem import loginPage_BP
 from profile import profilePage_BP
-from database.db_system import userInfo, getAllStatus, getBookByID, setRate, setReview
+from database.db_system import userInfo, getAllStatus, getBookByID, setRate, setReview, setStatus
 from bookSearch import bookSearch, SearchForm
 from Book import Book, sortBookList
 from bookReview import bookReviewForm
@@ -64,10 +64,13 @@ def addReview():
             session["book"] = bb
         if reviewForm.validate_on_submit():
             book = Book(session['book'])
-            if reviewForm.score.data != "":
+            ch = [(None, ""), (1, 'Quero Ler'), (2, "Lendo"), (3, "Complete")]
+            if reviewForm.score.data != None:
                 setRate(session['id'], book, reviewForm.score.data)
             if reviewForm.review.data != "":
-                (works, msg, result) = setReview(session['id'], book, reviewForm.review.data)
+                setReview(session['id'], book, reviewForm.review.data)
+            if reviewForm.status.data != "None":
+                setStatus(session['id'], book, int(reviewForm.status.data))
             reviewForm.review = ''
             return render_template('profile.html', account=account, username=session['username'])
         return render_template('addReview.html', reviewForm = reviewForm, account=account, username=session['username'], book=session["book"])

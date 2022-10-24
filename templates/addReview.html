@@ -16,14 +16,21 @@
         </div>
     </div>
     <p>
-        <b>Score</b>
+        <b>Nota ( Opcional )</b>
     </p>
     <p>
         {{ reviewForm.hidden_tag() }}
         {{ reviewForm.score }}
     </p>
     <p>
-        <b>Review</b>
+        <b>Status ( Opcional )</b>
+    </p>
+    <p>
+        {{ reviewForm.hidden_tag() }}
+        {{ reviewForm.status }}
+    </p>
+    <p>
+        <b>Review ( Obrigatorio )</b>
     </p>
     <p>
         {{ reviewForm.review.input }}{{ reviewForm.review(size=50) }}
