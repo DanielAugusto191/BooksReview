@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-
+{% import 'macros.html' as macro %}
 {% block title %}Profile{% endblock %}
 
 {% block content %}
@@ -35,7 +35,7 @@
             {{ account['bio'] }}
         </div>
         <div id="reviews">
-            
+            {{ macro.reviews(books) }}
         </div:>
     </div>
 </div>

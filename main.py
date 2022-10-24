@@ -72,7 +72,7 @@ def addReview():
             if reviewForm.status.data != "None":
                 setStatus(session['id'], book, int(reviewForm.status.data))
             reviewForm.review = ''
-            return render_template('profile.html', account=account, username=session['username'])
+            return redirect(url_for('profilePage.profile'))
         return render_template('addReview.html', reviewForm = reviewForm, account=account, username=session['username'], book=session["book"])
     return redirect(url_for('loginPage.login'))
 

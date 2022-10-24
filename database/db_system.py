@@ -401,7 +401,7 @@ Return:
 Tuple of:
     works = True/False - If there is no error.
     msg = ""/"error" - Status of works.
-    reviews = List of Reviews(that are Dicts of Books ID, Books name, rate and Review) - [{"BookID"=ID, "BookName"=BooksName,"rate"=rate, "review"=Review}, {"BookID"=ID, "BookName"=BooksName, "rate"=rate, "review"=Review}, ...]
+    reviews = List of Reviews(that are Dicts of date, review, bookID) - [{"date"=date of review, "review"=review,"fk_Book"=bookID},...]
 '''
     works = False
     msg = ""

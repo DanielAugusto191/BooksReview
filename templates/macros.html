@@ -60,3 +60,17 @@
         <h2>Adicione livros que você já leu!</h2> 
 {% endif %}
 {% endmacro %}
+
+{% macro reviews(books) %}
+    {% if books %}
+        {% for book in books %}
+            <div class="statusBookList">
+                <h3>{{book["book"].title}}</h3>
+                <img src="{{ book['book'].imageLink }}" alt="{{ book['book'].title }}" class="img-responsive">
+                <p>{{book["review"]}}</p>
+            </div>
+        {% endfor%}  
+    {% else %}
+        <h2>Voce ainda nao fez o review de nenhum livro!</h2> 
+    {% endif %}
+{% endmacro%}

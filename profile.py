@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, FileField
 from database.db_system import updateUsername, updateBiografy, updatePassword
 import re
-from database.db_system import userInfo
+from database.db_system import userInfo, getAllReviews, getRate, getBookByID
 
 profilePage_BP = Blueprint("profilePage", __name__, template_folder="templates")
 
@@ -19,7 +19,15 @@ class profileForm(FlaskForm):
 def profile():
     if 'loggedin' in session:
         (works, msg, account) = userInfo(session["id"])
-        return render_template('profile.html', account=account, username=session['username'])
+        bookList = []
+        (works, msg, result) = getAllReviews(session["id"])
+        for e in result:
+            (_,_,book) = getBookByID(e["fk_Book"])
+            (works, msg, resultRate) = getRate(session["id"], book)
+            if not works:
+                resultresultRate = "Voce nao avaliou esse livro!"
+            bookList.append({"book": book, "review": e["review"], "rate": resultRate})
+        return render_template('profile.html', account=account, username=session['username'], books=bookList)
     return redirect(url_for('loginPage.login'))
 
 @profilePage_BP.route('/profile_edit', methods=['GET', 'POST'])
