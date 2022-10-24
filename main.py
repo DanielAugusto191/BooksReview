@@ -6,9 +6,7 @@ import re
 
 from loginSystem import loginPage_BP
 from profile import profilePage_BP
-from database.db_system import userInfo
-from database.db_system import getAllStatus
-from database.db_system import getBookByID
+from database.db_system import userInfo, getAllStatus, getBookByID, setRate, setReview
 from bookSearch import bookSearch, SearchForm
 from Book import Book, sortBookList
 from bookReview import bookReviewForm
@@ -53,15 +51,27 @@ def home():
 
 @app.route('/addReview', methods=["GET", "POST"])
 def addReview():
-     if 'loggedin' in session:
-         reviewForm = bookReviewForm()
-         (works, msg, account) = userInfo(session["id"])
-         if reviewForm.validate_on_submit():
-             #TODO Add to database
-             reviewForm.review = ''
-             return render_template('profile.html', account=account, username=session['username'])
-         return render_template('addReview.html', reviewForm = reviewForm, account=account, username=session['username'])
-     return redirect(url_for('loginPage.login'))
+    if 'loggedin' in session:
+        reviewForm = bookReviewForm()
+        (works, msg, account) = userInfo(session["id"])
+        if request.method == "GET":
+            title = request.args.get('title', None)
+            authors = request.args.get('authors', None)
+            imageLink = request.args.get('imageLink', None)
+            description = request.args.get('description', None)
+            bkid = request.args.get('bkid', None)
+            bb = {"id": bkid, "volumeInfo": {"title": title, "authors": authors, "description": description, "imageLinks": {"smallThumbnail": imageLink}}}
+            session["book"] = bb
+        if reviewForm.validate_on_submit():
+            book = Book(session['book'])
+            if reviewForm.score.data != "":
+                setRate(session['id'], book, reviewForm.score.data)
+            if reviewForm.review.data != "":
+                (works, msg, result) = setReview(session['id'], book, reviewForm.review.data)
+            reviewForm.review = ''
+            return render_template('profile.html', account=account, username=session['username'])
+        return render_template('addReview.html', reviewForm = reviewForm, account=account, username=session['username'], book=session["book"])
+    return redirect(url_for('loginPage.login'))
 
 @app.route('/wantRead')
 def wantRead():

@@ -4,7 +4,8 @@
 
 {% block content %}
 <h2> Write your review!</h2>
-<form method="POST" action="/home" class="d-flex">
+<form method="POST" action="{{ url_for('addReview') }}" class="d-flex">
+    {{ reviewForm.csrf_token }}
     <div style="margin-bottom: 15px;">
         <div class="text-center"> 
             <hr>
@@ -27,6 +28,6 @@
     <p>
         {{ reviewForm.review.input }}{{ reviewForm.review(size=50) }}
     </p>
-        <button class="btn" type="submit">Post</button>
+        {{ reviewForm.submit() }}
 </form>
 {% endblock %}

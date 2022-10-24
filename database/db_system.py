@@ -208,8 +208,7 @@ Tuple of:
         (conn, cur) = connectDatabase()
         if checkBook(book.id):
             raise Exception("Books already in DB")
-        # TODO: bookRate
-        cur.execute("INSERT INTO Book (id, title, cover, author, description, rate) VALUES (?, ?, ?, ?, ?, ?)", (book.id, book.title, book.imageLink, book.authors[0], book.description, 0.0))
+        cur.execute("INSERT INTO Book (id, title, cover, author, description, rate) VALUES (?, ?, ?, ?, ?, ?)", (book.id, book.title, book.imageLink, book.authors, book.description, 0.0))
         conn.commit()
         works = True
         msg = "Livro adicionado!"
@@ -480,7 +479,7 @@ Tuple of:
         if not checkUser(userID):
             raise Exception("Invalid UserID!")
         if not checkBook(bookID):
-            addBook(book)
+            (works, msg) = addBook(book)
 
         cur.execute('SELECT id, date FROM Rate WHERE fk_User = ? and fk_Book = ?', (userID, bookID))
         result = cur.fetchone()

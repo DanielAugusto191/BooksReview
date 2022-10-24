@@ -11,7 +11,7 @@
                 </div>
                 <p>{{ book.description }}</p>
                 <div style="text-align: center;">
-                    <input type="submit" value="Escrever review">
+                    <a href="{{ url_for('addReview', title=book.title, author=book.authors, imageLink=book.imageLink, description=book.description, bkid=book.id) }}">Escrever Review</a>
                 </div>
             </div>
         </div>
