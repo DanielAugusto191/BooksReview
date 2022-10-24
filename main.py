@@ -63,7 +63,8 @@ def addReview():
             session["book"] = bb
             bb = Book(bb)
             (_,_,rr) = getReview(session["id"], bb)
-            reviewForm.review.data = rr["review"]
+            if hasattr(rr, 'keys') and 'review' in rr.keys():
+                reviewForm.review.data = rr['review']
         if reviewForm.validate_on_submit():
             book = Book(session['book'])
             ch = [(None, ""), (1, 'Quero Ler'), (2, "Lendo"), (3, "Complete")]
@@ -75,7 +76,7 @@ def addReview():
                 setStatus(session['id'], book, int(reviewForm.status.data))
             reviewForm.review = ''
             return redirect(url_for('profilePage.profile'))
-        return render_template('addReview.html', reviewForm = reviewForm, account=account, username=session['username'], book=session["book"])
+        return render_template('addReview.html', reviewForm = reviewForm, account=account, username=session['username'], book=bb)
     return redirect(url_for('loginPage.login'))
 
 @app.route('/wantRead')
