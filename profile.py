@@ -36,8 +36,12 @@ def profile():
 
 @profilePage_BP.route('/profile_edit', methods=['GET', 'POST'])
 def profileEdit():
+    
     if 'loggedin' in session:
+        (works, msg, account) = userInfo(session["id"])
         profForm = profileForm()
+        if hasattr(account, 'keys') and 'bio' in account.keys():
+            profForm.bio.data = account['bio']
         if profForm.validate_on_submit():
             if profForm.username.data != "":
                 (works, msg) = updateUsername(session['id'], profForm.username.data)
@@ -52,6 +56,6 @@ def profileEdit():
                 picName = str(uuid.uuid1()) + "_" + picFilename
                 profForm.profile_pic.data.save(os.path.join("static/profilePics/", picName))
                 (works, msg) = updateProfilePicture(session['id'], picName)
-
+        #return redirect(url_for('profilePage.profile'))
         return render_template("profile_edit.html", form = profForm)
     return redirect(url_for('loginPage.login')) 
