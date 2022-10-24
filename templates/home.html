@@ -7,21 +7,15 @@
     <body>
         <div id="books">
             <h2>Home Page</h2>
-            <form method="POST" action="/home" class="d-flex">
-                <p>
-                    <b>Search Books</b>
-                </p>
-                <p>
-                    {{ searchForm.hidden_tag() }}
-                    {{ searchForm.searched.input }}{{ searchForm.searched(size=16) }}
-                </p>
-                <p>
-                    Order by  {{ searchForm.sortBy }}
-                </p>
-                <p>
-                    <button class="btn" type="submit">Search</button>
-                </p>
-            </form>
+            <form action="{{ url_for('home') }}" method="post">
+				<input type="text" name="searched" placeholder="searched" id="searched" required>        
+                <select name="sortBy" placeholder="sortBy" id="sortBy"required>
+                    <option value='relevance' selected> Relevância </option>
+                    <option value='title'>Título</option>
+                    <option value='authors'>Autores</option>
+                </select>
+				<button type="submit">Pesquisar</button>
+			</form>
             <div class="container">
                 <div>
                     {{ macro.displayBook(titles) }}

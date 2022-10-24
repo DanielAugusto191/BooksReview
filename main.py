@@ -11,6 +11,8 @@ from bookSearch import bookSearch, SearchForm
 from Book import Book, sortBookList
 from bookReview import bookReviewForm
 
+from flask import Blueprint, render_template, request, session, redirect, url_for
+
 app = Flask(__name__)
 app.secret_key = "LIMAO"
 app.config['ENVIRONMENT_VAR'] = 'FLASK_APP'
@@ -29,25 +31,45 @@ if __name__ == "__main__":
 
 searched = "Skulduggery pleasant".replace(" ", "%20")
 
+# @app.route('/home', methods=["POST", "GET"])
+# def home():
+#     if 'loggedin' in session:
+#         searchForm = SearchForm()
+#         global searched
+#         bookList = []
+#         if searchForm.validate_on_submit():
+#             if searchForm.searched.data != None:
+#                 searched = (searchForm.searched.data).replace(" ", "%20")
+#             data = bookSearch(searched)
+#             if "items" in data:
+#                 for i in range(len(data["items"])):  
+#                     if (("imageLinks" in data["items"][i]["volumeInfo"]) and ("description" in data["items"][i]["volumeInfo"])
+#                     and ("authors" in data["items"][i]["volumeInfo"])):
+#                         bookList.append(Book(data["items"][i]))
+#                 if(searchForm.sortBy.data is not None):
+#                     bookList = sortBookList(bookList, searchForm.sortBy.data)
+#         return render_template('home.html', searchForm = searchForm, username=session['username'], titles=bookList)
+#     return redirect(url_for('loginPage.login'))
+
+
 @app.route('/home', methods=["POST", "GET"])
 def home():
     if 'loggedin' in session:
-        searchForm = SearchForm()
-        global searched
         bookList = []
-        if searchForm.validate_on_submit():
-            if searchForm.searched.data != None:
-                searched = (searchForm.searched.data).replace(" ", "%20")
-            data = bookSearch(searched)
-            if "items" in data:
-                for i in range(len(data["items"])):  
-                    if (("imageLinks" in data["items"][i]["volumeInfo"]) and ("description" in data["items"][i]["volumeInfo"])
-                    and ("authors" in data["items"][i]["volumeInfo"])):
-                        bookList.append(Book(data["items"][i]))
-                if(searchForm.sortBy.data is not None):
-                    bookList = sortBookList(bookList, searchForm.sortBy.data)
-        return render_template('home.html', searchForm = searchForm, username=session['username'], titles=bookList)
+        if request.method == "POST":
+            if request.form['searched'] != None:
+                searched = request.form['searched'].replace(" ", "%20")
+                data = bookSearch(searched)
+                if "items" in data:
+                    for i in range(len(data["items"])):  
+                        if (("imageLinks" in data["items"][i]["volumeInfo"]) and ("description" in data["items"][i]["volumeInfo"])
+                        and ("authors" in data["items"][i]["volumeInfo"])):
+                            bookList.append(Book(data["items"][i]))
+                    if(request.form['sortBy'] is not None):
+                        bookList = sortBookList(bookList, request.form['sortBy'])
+        return render_template('home.html', titles=bookList)
     return redirect(url_for('loginPage.login'))
+
 
 @app.route('/addReview', methods=["GET", "POST"])
 def addReview():
