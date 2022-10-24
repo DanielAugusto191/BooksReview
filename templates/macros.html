@@ -68,7 +68,11 @@
                 <h3>{{book["book"].title}}</h3>
                 <img src="{{ book['book'].imageLink }}" alt="{{ book['book'].title }}" class="img-responsive">
                 <p>{{book["review"]}}</p>
-                <p>Nota: {{book["rate"]["rate"]}} - Dada em: {{book["rate"]["date"]}}</p>
+                {% if book["rate"]["rate"] %}
+                    <p>Sua Nota: {{book["rate"]["rate"]}} - Dada em: {{book["rate"]["date"]}} - Nota Media do Livro: {{book["bookRate"]["rate"]}}</p>
+                {% else %}
+                    <p>Voce ainda nao deu uma nota! - Nota Media do Livro: {{book["bookRate"]["rate"]}}</p>
+                {% endif%}
             </div>
         {% endfor%}  
     {% else %}

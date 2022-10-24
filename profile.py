@@ -4,7 +4,7 @@ from wtforms import StringField, PasswordField, SubmitField, TextAreaField, File
 from database.db_system import updateUsername, updateBiografy, updatePassword
 import re
 import os
-from database.db_system import userInfo, getAllReviews, getRate, getBookByID, updateProfilePicture
+from database.db_system import userInfo, getAllReviews, getRate, getBookByID, updateProfilePicture, getBookRateByID
 from werkzeug.utils import secure_filename
 import uuid as uuid
 
@@ -29,7 +29,8 @@ def profile():
             (works, msg, resultRate) = getRate(session["id"], book)
             if not works:
                 resultresultRate = "Voce nao avaliou esse livro!"
-            bookList.append({"book": book, "review": e["review"], "rate": resultRate})
+            (_, _, bookRate) = getBookRateByID(book.id)
+            bookList.append({"book": book, "review": e["review"], "rate": resultRate, "bookRate": bookRate})
         return render_template('profile.html', account=account, username=session['username'], books=bookList)
     return redirect(url_for('loginPage.login'))
 

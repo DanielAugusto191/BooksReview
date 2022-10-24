@@ -19,6 +19,7 @@ Summary:
     addBook(book) - Given a book object, add it in Database.
     getBookByID(bookID) - Given a book ID return a object of Book, with all informations in Database.
     updateBookRate(bookID) - Given a book ID, update the rate of this book, the rate is equal to the mean of all user's rate, rounded.
+    getBookRateByID(bookID) - Given a book ID, return the rate of this book.
 
 #Review
     setReview(userID, bookID, review) - Set a new review of a book
@@ -293,6 +294,37 @@ Tuple of:
     except Exception as e:
         msg = e
     return (works, msg)
+    
+def getBookRateByID(bookID):
+    ''' 
+Given a book ID, return the rate of this book.
+
+Parameters:
+bookID: ID of a book;
+
+Return:
+Tuple of:
+    works = True/False - If there is no error.
+    msg = "ok"/"{error}" - Status of works.
+    rate = dict("rate": {float(nota)})
+'''
+    works = False
+    msg = ""
+    rate = None
+    try:
+        (conn, cur) = connectDatabase()
+        if not checkBook(bookID):
+            raise Exception("Books not in DB")
+        cur.execute("SELECT rate FROM Book WHERE id = ?", (bookID,))
+        result = cur.fetchone()
+        if result == None:
+            raise Exception("Rate not found!")
+        rate = dict(result)
+        works = True
+        msg = ""
+    except Exception as e:
+        msg = e
+    return (works, msg, rate)
 
 ### REVIEW ####
 def setReview(userID, book, review):
