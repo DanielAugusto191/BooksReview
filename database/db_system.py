@@ -79,7 +79,6 @@ tuple of:
             raise Exception("ID invalido!")
         account = dict(account)
         del account["password"]
-        print(account)
         works = True
     except Exception as e:
         msg = e
@@ -132,7 +131,19 @@ Tuple of:
     works = True/False - If there is no error.
     msg = ""/"{error}" - Status of works.
 '''
-    pass
+    works = False
+    msg = ""
+    try:
+        (conn, cur) = connectDatabase()
+        if not checkUser(id):
+            raise Exception("Invalid UserID!")
+        cur.execute("UPDATE User SET profile_pic = ? WHERE id = ?", (newProfilePicture, id,))
+        conn.commit()
+        works = True
+        msg = "Foto de Perfil Atualizada com sucesso!"
+    except Exception as e:
+        msg = e
+    return (works, msg)
 
 def updateUsername(id, newUserName):
     ''' 

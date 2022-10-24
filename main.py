@@ -16,8 +16,7 @@ app.secret_key = "LIMAO"
 app.config['ENVIRONMENT_VAR'] = 'FLASK_APP'
 app.config["SQL_HOST"] = "localhost"
 app.config['SQL_USER'] = 'root'
-app.config['SQL_PASSWORD'] = '123'
-app.config['SQL_DB'] = 'BooksReview'
+app.config['SQL_DB'] = 'database'
 app.register_blueprint(loginPage_BP)
 app.register_blueprint(profilePage_BP)
 

@@ -3,7 +3,10 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, FileField
 from database.db_system import updateUsername, updateBiografy, updatePassword
 import re
-from database.db_system import userInfo, getAllReviews, getRate, getBookByID
+import os
+from database.db_system import userInfo, getAllReviews, getRate, getBookByID, updateProfilePicture
+from werkzeug.utils import secure_filename
+import uuid as uuid
 
 profilePage_BP = Blueprint("profilePage", __name__, template_folder="templates")
 
@@ -43,5 +46,11 @@ def profileEdit():
             if profForm.bio.data != "":
                 (works, msg) = updateBiografy(session['id'], profForm.bio.data)
                 profForm.bio.data = ""
+            if profForm.profile_pic.data.filename != "":
+                picFilename = secure_filename(profForm.profile_pic.data.filename)
+                picName = str(uuid.uuid1()) + "_" + picFilename
+                profForm.profile_pic.data.save(os.path.join("static/profilePics/", picName))
+                (works, msg) = updateProfilePicture(session['id'], picName)
+
         return render_template("profile_edit.html", form = profForm)
     return redirect(url_for('loginPage.login')) 

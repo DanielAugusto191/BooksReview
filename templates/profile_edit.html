@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<form method="POST">
+<form method="POST", enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     <br>
     {{ form.username(placeholder="Novo Nome de Usuario") }}

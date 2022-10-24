@@ -6,7 +6,11 @@
 <h2> Perfil de {{ account['username'] }}</h2>
 <div id="userContainer">
     <div id="UserInfo">
-        <img src="{{ url_for('static', filename='profilePics/default.png')}}" width="200">
+        {% if account["profile_pic"] %}
+            <img src="{{ url_for('static', filename='profilePics/'+ account['profile_pic'])}}" width="200">
+        {% else %}
+            <img src="{{ url_for('static', filename='profilePics/default.png')}}" width="200">
+        {% endif %}
         <table>
             <tr>
                 <td>Nome de Usuario:</td>
